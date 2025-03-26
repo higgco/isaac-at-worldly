@@ -10,6 +10,7 @@ INNER JOIN public.account AS a
 	ON (a.account_id = s.account_id)
 WHERE
 	(fem.performance -> 'ensourcetotal')::NUMERIC > 1035500000
+	AND
 	a.account_id IN (
 	'67cc6b318498810134a7b2d0', --FEM 99 Small v030825
 	'67cc694ee7fc5d012979b13e', --FEM 170 Small v030825
