@@ -1,7 +1,10 @@
 SELECT
 	CUBE.assessment_id AS assessment_id,
+	CUBE.status AS status,
 	CUBE.performance->>'rfi_pid' AS rfi_pid,
-	-- CUBE.performance AS performance,
+	CUBE.performance->>'sitecountry' AS sitecountry,
+	(SELECT string_agg(element, ', ') FROM jsonb_array_elements_text(CUBE.performance->'sipindustrysector') AS element) AS sipindustrysector,	
+	(CUBE.performance->>'sipfulltimeemployees')::numeric AS sipfulltimeemployees,
 	(CUBE.performance->>'totalGHGemissions')::numeric AS totalGHGemissions,
     (CUBE.performance->>'totalRefrigerantEmissions')::numeric AS totalRefrigerantEmissions,
     (CUBE.performance->>'ensourcetotal')::numeric AS ensourcetotal,
