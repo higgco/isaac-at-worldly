@@ -9,6 +9,7 @@ SELECT
     (CUBE.performance->>'thermal_total_mj')::numeric AS thermal_total_mj,
     (CUBE.performance->>'electric_total_kgco2e')::numeric AS electric_total_kgco2e,
     (CUBE.performance->>'electric_total_mj')::numeric AS electric_total_mj,
+	(SELECT string_agg(element, ', ') FROM jsonb_array_elements_text(CUBE.performance->'sipfacilitytype') AS element) AS sipfacilitytype,	
 	(SELECT string_agg(element, ', ') FROM jsonb_array_elements_text(CUBE.performance->'ensourcefacility') AS element) AS ensourcefacility, --energy sources
     (CUBE.performance->>'ensourcecoaltotal')::numeric AS ensourcecoaltotal,
     (CUBE.performance->>'ensourcegeothermtotal')::numeric AS ensourcegeothermtotal,
@@ -173,7 +174,8 @@ SELECT
 	CUBE.performance->>'airprogress' AS airprogress,
 	CUBE.performance->>'airreplacelegal' AS airreplacelegal,
 	CUBE.performance->>'airtech' AS airtech,
-	(SELECT string_agg(element, ', ') FROM jsonb_array_elements_text(CUBE.performance->'sipproductcategories') AS element) AS sipproductcategories
+	(SELECT string_agg(element, ', ') FROM jsonb_array_elements_text(CUBE.performance->'sipproductcategories') AS element) AS sipproductcategories,
+	CASE WHEN (CUBE.performance->>'ensourcetotal')::numeric > 1035500000 THEN TRUE ELSE FALSE END AS outlier
 FROM fem_simple CUBE
 LEFT JOIN public.fem_shares fs ON fs.assessment_id = CUBE.assessment_id
 WHERE fs.share_status = 'accepted' AND fs.account_id = '67cc6b318498810134a7b2d0'
