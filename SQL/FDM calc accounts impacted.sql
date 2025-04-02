@@ -24,7 +24,7 @@ WHERE
 		ELSE raw ->'facilityData'->>'ensourcetracksepdomprod' END LIKE 'yes'	
 	AND (CASE WHEN raw ->> 'status' LIKE '%VRF%' 
 		THEN raw ->'verifierData'->>'energyseparate'
-		ELSE raw ->'facilityData'->>'energyseparate' END NOT LIKE 'no'
+		ELSE raw ->'facilityData'->>'energyseparate' END LIKE 'yes'
 		OR CASE WHEN raw ->> 'status' LIKE '%VRF%' 
 		THEN raw ->'verifierData'->>'energyseparate'
 		ELSE raw ->'facilityData'->>'energyseparate' END IS NULL)
