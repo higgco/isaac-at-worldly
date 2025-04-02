@@ -1,5 +1,6 @@
 SELECT
-COUNT(DISTINCT account_id)
+COUNT(DISTINCT assessment_id) AS assessment_count,
+account_id
 -- account_id,
 -- raw -> 'status' AS status,
 -- CASE WHEN raw ->> 'status' LIKE '%VRF%' 
@@ -30,3 +31,4 @@ WHERE
 		ELSE raw ->'facilityData'->>'energyseparate' END IS NULL)
 	AND raw ->> 'surveyVersion' = '2.0.0'
 	AND raw ->> 'facilityPosted' = 'true'
+GROUP BY 2
