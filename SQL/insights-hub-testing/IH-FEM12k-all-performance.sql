@@ -199,6 +199,9 @@ SELECT
     THEN TRUE 
     ELSE FALSE 
 	END AS outlier
+
+	-- CUBE.performance ->> 'is_outlier' AS outlier
+	-- replace previous outlier logic with line above once Javier pushes updated outlier logic to Staging
 	
 FROM fem_simple CUBE
 LEFT JOIN public.fem_shares fs ON fs.assessment_id = CUBE.assessment_id
