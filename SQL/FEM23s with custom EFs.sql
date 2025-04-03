@@ -18,3 +18,5 @@ WHERE
 	-- OR enchilldwateref LIKE 'Yes'
 	-- OR ensourcedistrictheatingefknown LIKE 'Yes'
 	-- OR enghgefelecpurch LIKE 'Yes')
+
+-- add above removed lines to include ALL custom EFs
