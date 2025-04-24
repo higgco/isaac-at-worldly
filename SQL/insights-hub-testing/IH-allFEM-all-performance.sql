@@ -195,7 +195,10 @@ SELECT
         OR (((CUBE.performance->>'printingProductDyeingAndLaunderingtotalmj')::numeric) / NULLIF((CUBE.performance->>'printingProductDyeingAndLaunderingtotal')::numeric, 0) > 1755)
         OR (((CUBE.performance->>'rawMaterialProcessingtotalmj')::numeric) / NULLIF((CUBE.performance->>'rawMaterialProcessingtotal')::numeric, 0) > 270)
         OR (((CUBE.performance->>'rawMaterialCollectiontotalmj')::numeric) / NULLIF((CUBE.performance->>'rawMaterialCollectiontotal')::numeric, 0) > 270)
-    ) 
+    	OR ((CUBE.performance->>'ensourcetotal')::numeric < 38574)
+		OR ((CUBE.performance->>'totalGHGemissions')::numeric < 0)
+		OR ((CUBE.performance->>'totalGHGemissions')::numeric > 1000000000000)    
+	) 
     THEN TRUE 
     ELSE FALSE 
 	END AS outlier
@@ -205,6 +208,5 @@ SELECT
 	
 FROM fem_simple CUBE
 LEFT JOIN public.fem_shares fs ON fs.assessment_id = CUBE.assessment_id
-WHERE fs.share_status = 'accepted' 
--- AND fs.account_id = '67cc6c28ab428a013f5fa7d3'
+WHERE CUBE.facility_posted = 'true'
 ORDER BY 1
