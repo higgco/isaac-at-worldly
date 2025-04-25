@@ -195,7 +195,6 @@ SELECT
         OR (((CUBE.performance->>'printingProductDyeingAndLaunderingtotalmj')::numeric) / NULLIF((CUBE.performance->>'printingProductDyeingAndLaunderingtotal')::numeric, 0) > 1755)
         OR (((CUBE.performance->>'rawMaterialProcessingtotalmj')::numeric) / NULLIF((CUBE.performance->>'rawMaterialProcessingtotal')::numeric, 0) > 270)
         OR (((CUBE.performance->>'rawMaterialCollectiontotalmj')::numeric) / NULLIF((CUBE.performance->>'rawMaterialCollectiontotal')::numeric, 0) > 270)
-    	OR ((CUBE.performance->>'ensourcetotal')::numeric < 38574)
 		OR ((CUBE.performance->>'totalGHGemissions')::numeric < 0)
 		OR ((CUBE.performance->>'totalGHGemissions')::numeric > 1000000000000)
 	) 
