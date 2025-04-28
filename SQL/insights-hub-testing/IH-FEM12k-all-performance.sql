@@ -200,11 +200,13 @@ SELECT
 	) 
     THEN TRUE 
     ELSE FALSE 
-	END AS outlier
+	END AS outlier,
 
 	-- CUBE.performance ->> 'is_outlier' AS outlier
 	-- replace previous outlier logic with line above once Javier pushes updated outlier logic to Staging
-	
+
+	CASE WHEN (CUBE.performance->>'ensourcetotal')::numeric > 38574 THEN TRUE ELSE FALSE END AS meets_energy_threshold
+
 FROM fem_simple CUBE
 LEFT JOIN public.fem_shares fs ON fs.assessment_id = CUBE.assessment_id
 WHERE fs.share_status = 'accepted' AND fs.account_id = '67cf0312482e3b00be3f7574'
