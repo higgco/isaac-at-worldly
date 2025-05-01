@@ -1,6 +1,8 @@
 SELECT
 	CUBE.assessment_id AS assessment_id,
 	CUBE.status AS status,
+	CASE WHEN (((CUBE.facility_posted = TRUE) OR (CUBE.verifier_posted = TRUE)) AND CUBE.status != 'ASD')
+		THEN TRUE ELSE FALSE END AS ih_eligible,
 	CUBE.performance->>'rfi_pid' AS rfi_pid,
 	CUBE.performance->>'sitecountry' AS sitecountry,
 	(SELECT string_agg(element, ', ') FROM jsonb_array_elements_text(CUBE.performance->'sipindustrysector') AS element) AS sipindustrysector,	
@@ -178,7 +180,6 @@ SELECT
 	CUBE.performance->>'airreplacelegal' AS airreplacelegal,
 	CUBE.performance->>'airtech' AS airtech,
 	(SELECT string_agg(element, ', ') FROM jsonb_array_elements_text(CUBE.performance->'sipproductcategories') AS element) AS sipproductcategories,
-	-- CASE WHEN (CUBE.performance->>'ensourcetotal')::numeric > 1035500000 THEN TRUE ELSE FALSE END AS outlier
 	
 	CASE WHEN (
         ((CUBE.performance->>'ensourcetotal')::numeric > 1035500000)
