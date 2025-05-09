@@ -25,8 +25,7 @@ WITH eligibility AS (
 		            facility_types.facility_type LIKE '%Finished Product Assembler%' OR
 		            facility_types.facility_type LIKE '%Finished Product Processing%' OR
 		            facility_types.facility_type LIKE '%Final Product Assembly%' OR
-		            facility_types.facility_type LIKE '%Printing, Product Dyeing and Laundering%' OR
-		            facility_types.facility_type LIKE '%Finished Product Processing (Product Printing, Product Painting, Product Dyeing, Product Laundering and Product Finishing, Embroidery & Embellishments)%'
+		            facility_types.facility_type LIKE '%Printing, Product Dyeing and Laundering%'
 		        )
 		        AND NOT (
 		            facility_types.facility_type LIKE '%Material Production%' OR
