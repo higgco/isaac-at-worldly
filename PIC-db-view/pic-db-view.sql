@@ -20,26 +20,14 @@ WITH eligibility AS (
         END AS status_eligibility,
         facility_types.facility_type, -- Extracted facility types as a comma-separated string
         CASE
-		    WHEN (
-		        (
-		            facility_types.facility_type LIKE '%Finished Product Assembler%' OR
-		            facility_types.facility_type LIKE '%Finished Product Processing%' OR
-		            facility_types.facility_type LIKE '%Final Product Assembly%' OR
-		            facility_types.facility_type LIKE '%Printing, Product Dyeing and Laundering%'
-		        )
-		        AND NOT (
-		            facility_types.facility_type LIKE '%Material Production%' OR
-		            facility_types.facility_type LIKE '%Hard Product Component & Trim Production%' OR
-		            facility_types.facility_type LIKE '%Chemical & Raw Material Production%' OR
-		            facility_types.facility_type LIKE '%Packaging Production%' OR
-		            facility_types.facility_type LIKE '%Other%' OR
-		            facility_types.facility_type LIKE '%Component / Sub-Assembly Manufacturing%' OR
-		            facility_types.facility_type LIKE '%Raw Material Processing%' OR
-		            facility_types.facility_type LIKE '%Raw Material Collection & Bulk Refining%'
-		        )
-		    )
-		    THEN 'Eligible'
-		    ELSE 'Not eligible'
+			WHEN
+			    (  
+				facility_types.facility_type LIKE '%Finished Product Assembler%' OR
+				facility_types.facility_type LIKE '%Finished Product Processing%' OR
+				facility_types.facility_type LIKE '%Final Product Assembly%' OR
+				facility_types.facility_type LIKE '%Printing, Product Dyeing and Laundering%'
+			    )
+				THEN 'Eligible' ELSE 'Not eligible'
 		END AS tier_eligibility	,
         CASE
             WHEN fem.rfi_pid IN ('fem2022', 'fem2021', 'fem2020', 'fem201')
