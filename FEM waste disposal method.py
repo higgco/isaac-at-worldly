@@ -1,6 +1,8 @@
 import psycopg2
 import time
 import os
+import platform
+import subprocess
 from dotenv import load_dotenv
 load_dotenv()
 import ast
@@ -103,10 +105,12 @@ def process_table(input_table, column_names):
 # Get the script's filename and create a unique output filename
 script_filename = os.path.basename(__file__)
 base_filename = os.path.splitext(script_filename)[0]
-# Set the file paths
-output_directory = f"C:\\YOUR PATH HERE\\{brand} Results"
+# Set the file paths dynamically in user's Documents, with date
+today = datetime.now().strftime("%Y%m%d")
+documents_folder = os.path.join(os.path.expanduser("~"), "Documents")
+output_directory = os.path.join(documents_folder, f"{brand}_waste-disposal_{today}")
 excel_output_file = os.path.join(output_directory, f"{base_filename} results.xlsx")
-png_image_file = os.path.join(output_directory, f'{excel_output_file} bar chart and table.png')
+png_image_file = os.path.join(output_directory, f'{base_filename} results bar chart and table.png')
 # Create the output directory if it doesn't exist
 os.makedirs(output_directory, exist_ok=True)
 # Attempt to execute the query with retries
@@ -305,7 +309,12 @@ sheet.add_image(img)
 wb.save(excel_output_file)
 # Cleanup (optional): remove the temporary PNG file after saving
 os.remove(png_image_file)
-os.startfile(excel_output_file)
+if platform.system() == "Darwin":  # macOS
+    subprocess.run(["open", excel_output_file])
+elif platform.system() == "Windows":
+    os.startfile(excel_output_file)
+else:
+    print(f"Please open the file manually: {excel_output_file}")
 print('Interactive plot open...')
 plt.show()
 print("Fin.")
