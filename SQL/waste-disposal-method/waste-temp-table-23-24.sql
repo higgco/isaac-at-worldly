@@ -4,7 +4,8 @@ CREATE TABLE isaac_hopwood.fem2023_24_answers_tmp AS
 SELECT
     assessment_id,
 	rfi_pid,
-    raw -> 'results' -> 'answers' AS answers
+	answers,
+    performance
 FROM public.fem_simple
 WHERE
     (rfi_pid = 'fem2023' OR rfi_pid = 'fem2024')
