@@ -1,6 +1,6 @@
-psycopg2-binary
-pandas
-matplotlib
-openpyxl
-python-dotenv
-xlsxwriter
+psycopg2-binary>=2.9
+pandas>=1.5
+matplotlib>=3.5
+openpyxl>=3.0
+python-dotenv>=1.0
+xlsxwriter>=3.0
