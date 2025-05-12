@@ -28,8 +28,10 @@ retry_count = 0
 max_retries = 5
 delay_interval = 10  # in seconds
 brand = "ALL FEM23_24"
+rfi_pid = "fem2023"
 query = f'''
 SELECT * FROM isaac_hopwood.fem2023_24_answers_final
+WHERE rfi_pid = '{rfi_pid}'
 '''
 
 # Function to process the table and combine quantities into a single column
