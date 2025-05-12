@@ -28,7 +28,7 @@ WITH eligibility AS (
 				facility_types.facility_type LIKE '%Printing, Product Dyeing and Laundering%'
 			    )
 				THEN 'Eligible' ELSE 'Not eligible'
-		END AS tier_eligibility	,
+		END AS tier_eligibility,
         CASE
             WHEN fem.rfi_pid IN ('fem2022', 'fem2021', 'fem2020', 'fem201')
             THEN fem.performance ->> 'sipfacilityannualprodvolquant'
