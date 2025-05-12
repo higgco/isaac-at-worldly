@@ -31,36 +31,7 @@ brand = "ALL FEM23_24"
 query = f'''
 SELECT * FROM isaac_hopwood.fem2023_24_answers_final
 '''
-# Unit conversion function with error handling
-def convert_to_kg(row):
-    quantity = row['quantity']
-    # Check if quantity is None
-    if quantity is None:
-        return None, row['unit']  # Return None and the original unit if quantity is not valid
-    try:
-        quantity = float(quantity)
-    except ValueError:
-        # Handle case where quantity can't be converted to float
-        print(f"Error converting quantity: {row['quantity']}")
-        return None, row['unit']  # Return None and the original unit if conversion fails
-    unit = row['unit']
-    conversion_factors = {
-        'g': 0.001,          # 1 gram = 0.001 kg
-        'kg': 1,             # 1 kg = 1 kg
-        'lb': 0.453592,      # 1 pound = 0.453592 kg
-        'oz': 0.0283495,     # 1 ounce = 0.0283495 kg
-        'tonmetric': 1000,   # 1 metric ton = 1000 kg
-        'tonshort': 907.18474 # 1 short ton = 907.18474 kg
-    }
-    # Convert the quantity to kg
-    converted_quantity = quantity * conversion_factors.get(unit, 1)
-    # Update the unit to reflect the conversion, but keep it as 'kg' if it's already in kg
-    if unit == 'kg':
-        new_unit = 'kg'
-    else:
-        new_unit = f"kg (converted from {unit})"
-    # Return the converted quantity and updated unit
-    return converted_quantity, new_unit
+
 # Function to process the table and combine quantities into a single column
 def process_table(input_table, column_names):
     processed_list = []
@@ -77,11 +48,9 @@ def process_table(input_table, column_names):
         assessment_id = row_dict.get('assessment_id')
         for source in waste_sources:
             method_col = f"{source}_method"
-            quantity_col = f"{source}_quant"
-            unit_col = f"{source}_unit"
+            quantity_col = f"{source}_quant_kg"
             method = row_dict.get(method_col)
             quantity = row_dict.get(quantity_col)
-            unit = row_dict.get(unit_col)
             if quantity is not None and quantity != 0:
                 try:
                     methods = ast.literal_eval(method) if method else []
@@ -97,7 +66,6 @@ def process_table(input_table, column_names):
                         'waste_source': source,
                         'disposal_method': single_method,
                         'quantity': split_quantity,
-                        'unit': unit,
                         'estimated': add_estimate
                     }
                     processed_list.append(processed_row)
@@ -126,16 +94,7 @@ while retry_count < max_retries:
             results = cursor.fetchall()
             column_names = [desc[0] for desc in cursor.description]
             if results:
-                processed_results = []
-                for row in results:
-                    new_row = list(row)
-                    for i in range(len(column_names)):
-                        if column_names[i].endswith('quant'):
-                            unit_index = column_names.index(column_names[i].replace('quant', 'unit'))
-                            converted_quantity, new_unit = convert_to_kg({'quantity': new_row[i], 'unit': new_row[unit_index]})
-                            new_row[i] = converted_quantity
-                            new_row[unit_index] = new_unit
-                    processed_results.append(new_row)
+                processed_results = results
                 processed_list = process_table(processed_results, column_names)
                 # Create DataFrame from processed_list
                 processed_list_df = pd.DataFrame(processed_list)
