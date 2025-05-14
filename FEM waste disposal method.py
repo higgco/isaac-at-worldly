@@ -32,9 +32,6 @@ rfi_pid = "fem2023"
 query = f'''
 SELECT * FROM isaac_hopwood.fem2023_24_answers_final AS fem
 WHERE fem.rfi_pid = '{rfi_pid}'
-AND fem.assessment_id NOT IN (
-    SELECT DISTINCT assessment_id
-    FROM public.fem_data_outliers)
 '''
 
 # Function to process the table and combine quantities into a single column
