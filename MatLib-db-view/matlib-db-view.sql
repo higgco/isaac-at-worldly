@@ -24,8 +24,12 @@ WITH eligibility AS (
         END AS status_eligibility,
         facility_types.facility_type, -- Extracted facility types as a comma-separated string
         CASE
-            WHEN ((facility_types.facility_type IN ('Raw Material Processing (Raw Materials are processed into intermediate material products) (e.g. Yarn Spinning).','Chemical & Raw Material Production','Material Production (Raw and intermediate materials are transformed into their final state before assembly) (e.g. Fabric dye-house, Fabric manufacturer, Yarn Dyeing, PCB manufacturer, etc)')
-            AND (facility_types.facility_type NOT IN ('Finished Product Assembler','Finished Product Processing','Final Product Assembly','Printing, Product Dyeing and Laundering', 'Hard Product Component & Trim Production', 'Packaging Production', 'Other','Component / Sub-Assembly Manufacturing', 'Raw Material Collection & Bulk Refining'))))
+            WHEN 
+                (
+                    facility_types.facility_type LIKE '%Raw Material Processing (Raw Materials are processed into intermediate material products)%' OR
+                    facility_types.facility_type LIKE '%Chemical & Raw Material Production%' OR
+                    facility_types.facility_type LIKE '%Material Production (Raw and intermediate materials are transformed into their final state before assembly)%'
+                )  
             THEN 'Eligible' ELSE 'Not eligible'
         END AS tier_eligibility,
         CASE
