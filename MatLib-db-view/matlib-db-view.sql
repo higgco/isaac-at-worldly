@@ -70,7 +70,7 @@ WITH eligibility AS (
 			ELSE 'Eligible'
 		END AS textile_material_process_eligibility,
         fem.performance ->> 'ensourcetrackopt' AS tracking_any_energy,
-        CASE WHEN fem.performance ->> 'ensourcetrackopt' <> 'Yes'
+        CASE WHEN (fem.performance ->> 'ensourcetrackopt' <> 'Yes' OR fem.performance ->> 'ensourcetrackopt' IS NULL)
             THEN 'Not eligible' ELSE 'Eligible'
         END AS energy_eligibility,
         CASE
