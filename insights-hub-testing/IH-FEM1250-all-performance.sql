@@ -14,7 +14,38 @@ SELECT
     (CUBE.performance->>'thermal_total_mj')::numeric AS thermal_total_mj,
     (CUBE.performance->>'electric_total_kgco2e')::numeric AS electric_total_kgco2e,
     (CUBE.performance->>'electric_total_mj')::numeric AS electric_total_mj,
+	
 	(SELECT string_agg(element, ', ') FROM jsonb_array_elements_text(CUBE.performance->'sipfacilitytype') AS element) AS sipfacilitytype,	
+	CASE WHEN (
+		CUBE.performance->>'sipfacilitytype' LIKE '%Final Product Assembly%' OR
+		CUBE.performance->>'sipfacilitytype' LIKE '%Finished Product Assembler%')
+		THEN TRUE ELSE FALSE
+	END AS finished_product_assembler,
+	CASE WHEN (
+		CUBE.performance->>'sipfacilitytype' LIKE '%Printing, Product Dyeing and Laundering%' OR
+		CUBE.performance->>'sipfacilitytype' LIKE '%Finished Product Processing%')
+		THEN TRUE ELSE FALSE
+	END AS finished_product_processing,
+	CASE WHEN (
+		CUBE.performance->>'sipfacilitytype' LIKE '%Packaging Production%' OR
+		CUBE.performance->>'sipfacilitytype' LIKE '%Hard Product Component%' OR
+		CUBE.performance->>'sipfacilitytype' LIKE '%Component / Sub-Assembly Manufacturing%')
+		THEN TRUE ELSE FALSE
+	END AS component_subassembly_manufacturing,
+	CASE WHEN (
+		CUBE.performance->>'sipfacilitytype' LIKE '%Material Production%')
+		THEN TRUE ELSE FALSE
+	END AS material_production,	
+	CASE WHEN (
+		CUBE.performance->>'sipfacilitytype' LIKE '%Raw Material Processing%')
+		THEN TRUE ELSE FALSE
+	END AS raw_material_processing,
+	CASE WHEN (
+		CUBE.performance->>'sipfacilitytype' LIKE '%Chemical & Raw Material Production%' OR
+		CUBE.performance->>'sipfacilitytype' LIKE '%Raw Material Collection%')
+		THEN TRUE ELSE FALSE
+	END AS raw_material_collection,
+	
 	(SELECT string_agg(element, ', ') FROM jsonb_array_elements_text(CUBE.performance->'ensourcefacility') AS element) AS ensourcefacility, --energy sources
     (CUBE.performance->>'ensourcecoaltotal')::numeric AS ensourcecoaltotal,
     (CUBE.performance->>'ensourcegeothermtotal')::numeric AS ensourcegeothermtotal,
