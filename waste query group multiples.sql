@@ -119,27 +119,49 @@ split AS (
         merging_disposal_and_volume
 ),
 
--- Final dataset with optional filtering or ordering
+-- Aggregate disposal method combinations
+disposal_grouped AS (
+    SELECT
+        assessment_id,
+        short_name,
+        waste_type,
+        string_agg(DISTINCT disposal_method, ', ' ORDER BY disposal_method) AS disposal_method_agg
+    FROM 
+        disposal_methods
+    GROUP BY 
+        assessment_id, short_name, waste_type
+),
+
+-- Final dataset with disposal group info
 dispers AS (
     SELECT 
-        * 
+        split.*, 
+        disposal_grouped.disposal_method_agg
     FROM 
         split
+    LEFT JOIN 
+        disposal_grouped
+    ON 
+        split.assessment_id = disposal_grouped.assessment_id 
+        AND split.short_name = disposal_grouped.short_name 
+        AND split.waste_type = disposal_grouped.waste_type
     ORDER BY 
-        assessment_id, 
-        waste_type, 
-        short_name, 
-        disposal_method
+        split.assessment_id, 
+        split.waste_type, 
+        split.short_name, 
+        split.disposal_method
 )
 
--- Final output
+-- Final output grouped by method combination
 SELECT
-	SUM(split_vol) AS vol,
-	CASE WHEN split_total > 1 THEN 'Multiple disposal methods'
-		ELSE disposal_method
-	END AS disposal_method_agg,
-	waste_type
-FROM dispers
-WHERE rfi_pid = 'fem2023'
-GROUP BY 2,3
-ORDER BY 1 DESC;
+    SUM(split_vol) AS vol,
+    disposal_method_agg,
+    waste_type
+FROM 
+    dispers
+WHERE 
+    rfi_pid = 'fem2023'
+GROUP BY 
+    disposal_method_agg, waste_type
+ORDER BY 
+    vol DESC;
