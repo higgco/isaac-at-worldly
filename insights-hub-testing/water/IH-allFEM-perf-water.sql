@@ -5,10 +5,18 @@ SELECT
 		THEN TRUE ELSE FALSE END AS ih_eligible,	
 	CUBE.performance->>'rfi_pid' AS rfi_pid,
 	CUBE.performance->>'sitecountry' AS sitecountry,
+
 	(SELECT string_agg(element, ', ') FROM jsonb_array_elements_text(CUBE.performance->'sipindustrysector') AS element) AS sipindustrysector,	
+    (SELECT string_agg(element, ', ') FROM jsonb_array_elements_text(CUBE.performance->'sipproductcategories') AS element) AS sipproductcategories,
+
 	(CUBE.performance->>'sipfulltimeemployees')::numeric AS sipfulltimeemployees,
 	(CUBE.performance->>'watopdays')::numeric AS watopdays,
+
+    (CUBE.performance->>'total_water_score')::numeric AS total_water_score,
+    (SELECT string_agg(element, ', ') FROM jsonb_array_elements_text(CUBE.performance->'water_levelsAchieved') AS element) AS water_levelsAchieved,
+	CUBE.performance->>'achieved_water_level1' AS achieved_water_level1,
 	
+    -- Facility Type
 	(SELECT string_agg(element, ', ') FROM jsonb_array_elements_text(CUBE.performance->'sipfacilitytype') AS element) AS sipfacilitytype,
 	CASE WHEN (
 		CUBE.performance->>'sipfacilitytype' LIKE '%Final Product Assembly%' OR
@@ -40,6 +48,7 @@ SELECT
 		THEN TRUE ELSE FALSE
 	END AS raw_material_collection,
 
+    --Sources
     CUBE.performance->>'watsourcetrackopt' AS watsourcetrackopt,
     CUBE.performance->>'watsourcetrackopteach' AS watsourcetrackopteach,
 	
@@ -69,15 +78,39 @@ SELECT
     (CUBE.performance->>'rawMaterialProcessing_water_l')::numeric AS rawMaterialProcessing_water_l,
     (CUBE.performance->>'rawMaterialCollection_water_l')::numeric AS rawMaterialCollection_water_l,
 
-    CUBE.performance->>'watsourcerecycled' AS watsourcerecycled --recycled sources,
-    CUBE.performance->>'watsourcewithdrawal' AS watsourcewithdrawal --withdrawal sources,
+    (CUBE.performance->>'watsourcerecycled')::numeric AS watsourcerecycled --recycled sources,
+    (CUBE.performance->>'watsourcewithdrawal')::numeric AS watsourcewithdrawal --withdrawal sources,
 
     (CUBE.performance->>'water_intensity_l_pc')::numeric AS water_intensity_l_pc,
     (CUBE.performance->>'water_intensity_l_kg')::numeric AS water_intensity_l_kg,    
 
-    (CUBE.performance->>'total_water_score')::numeric AS total_water_score,
-    (SELECT string_agg(element, ', ') FROM jsonb_array_elements_text(CUBE.performance->'water_levelsAchieved') AS element) AS water_levelsAchieved,
-	CUBE.performance->>'achieved_water_level1' AS achieved_water_level1,
+    (CUBE.performance->>'blue_water_use')::numeric AS blue_water_use,
+    (CUBE.performance->>'grey_water_use')::numeric AS grey_water_use,
+    (CUBE.performance->>'production_water_use')::numeric AS production_water_use,
+    (CUBE.performance->>'domestic_total_water_l')::numeric AS domestic_total_water_l,
+
+    CUBE.performance->>'watriskrating' AS watriskrating,
+    CUBE.performance->>'watgroundlegalreqlimit' AS watgroundlegalreqlimit,
+    CUBE.performance->>'watgroundlegalreq' AS watgroundlegalreq,
+    CUBE.performance->>'watmonitorleaks' AS watmonitorleaks,
+    CUBE.performance->>'watbalanceanalysis' AS watbalanceanalysis,
+    CUBE.performance->>'wataudit' AS wataudit,
+    CUBE.performance->>'watbaselineset' AS watbaselineset,
+    CUBE.performance->>'watbaselinesepdomprod' AS watbaselinesepdomprod,
+    CUBE.performance->>'wattargetoptblue' AS wattargetoptblue,
+    CUBE.performance->>'wattargetoptgrey' AS wattargetoptgrey,
+    CUBE.performance->>'watimproverainharvesting' AS watimproverainharvesting,
+    CUBE.performance->>'watimproveplan' AS watimproveplan,
+    CUBE.performance->>'watimproveopt' AS watimproveopt,
+    CUBE.performance->>'watimproveoptgrey' AS watimproveoptgrey,
+    CUBE.performance->>'watgroundelim' AS watgroundelim,
+    CUBE.performance->>'watbluereducedemonstrate' AS watbluereducedemonstrate,
+    (CUBE.performance->>'watbluereducepct')::numeric AS watbluereducepct,
+    (CUBE.performance->>'watbluereduceqty')::numeric AS watbluereduceqty,
+    CUBE.performance->>'watriskdisclosure' AS watriskdisclosure,
+    CUBE.performance->>'watdemonstratepositiveimpact' AS watdemonstratepositiveimpact,
+    CUBE.performance->>'watleadingtech' AS watleadingtech,
+    CUBE.performance->>'watsbt' AS watsbt,
 
     --SIP & EMS
     CUBE.performance->>'sipindustryprograms' AS sipindustryprograms,
@@ -113,26 +146,22 @@ SELECT
 	CUBE.performance->>'emshiggindexsubcontract' AS emshiggindexsubcontract,
 	CUBE.performance->>'emshiggindexupstream' AS emshiggindexupstream,
 	CUBE.performance->>'emsengagelocal' AS emsengagelocal,
-
-	(SELECT string_agg(element, ', ') FROM jsonb_array_elements_text(CUBE.performance->'sipproductcategories') AS element) AS sipproductcategories,
 	
 	CASE WHEN (
-        ((CUBE.performance->>'ensourcetotal')::numeric > 1035500000)
-        OR ((CUBE.performance->>'finalProductAssemblytotalmj')::numeric > 218000000)
-        OR ((CUBE.performance->>'hardComponentTrimProductiontotalmj')::numeric > 198000000)
-        OR ((CUBE.performance->>'materialProductiontotalmj')::numeric > 1059500000)
-        OR ((CUBE.performance->>'printingProductDyeingAndLaunderingtotalmj')::numeric > 645000000)
-        OR ((CUBE.performance->>'rawMaterialProcessingtotalmj')::numeric > 660000000)
-        OR ((CUBE.performance->>'rawMaterialCollectiontotalmj')::numeric > 660000000)
-        OR ((CUBE.performance->>'domestic_total_mj')::numeric > 64500000)
-        OR (((CUBE.performance->>'finalProductAssemblytotalmj')::numeric) / NULLIF((CUBE.performance->>'finalProductAssemblytotal')::numeric, 0) > 810)
-        OR (((CUBE.performance->>'hardComponentTrimProductiontotalmj')::numeric) / NULLIF((CUBE.performance->>'hardComponentTrimProductiontotal')::numeric, 0) > 870)
-        OR (((CUBE.performance->>'materialProductiontotalmj')::numeric) / NULLIF((CUBE.performance->>'materialProductiontotal')::numeric, 0) > 405)
-        OR (((CUBE.performance->>'printingProductDyeingAndLaunderingtotalmj')::numeric) / NULLIF((CUBE.performance->>'printingProductDyeingAndLaunderingtotal')::numeric, 0) > 1755)
-        OR (((CUBE.performance->>'rawMaterialProcessingtotalmj')::numeric) / NULLIF((CUBE.performance->>'rawMaterialProcessingtotal')::numeric, 0) > 270)
-        OR (((CUBE.performance->>'rawMaterialCollectiontotalmj')::numeric) / NULLIF((CUBE.performance->>'rawMaterialCollectiontotal')::numeric, 0) > 270)
-		OR ((CUBE.performance->>'totalGHGemissions')::numeric < 0)
-		OR ((CUBE.performance->>'totalGHGemissions')::numeric > 1000000000000)    
+        ((CUBE.performance->>'watsourcetotaltotal')::numeric > 1957500000)
+        OR ((CUBE.performance->>'finalProductAssembly_water_l')::numeric > 320800000)
+        OR ((CUBE.performance->>'hardComponentTrimProduction_water_l')::numeric > 220600000)
+        OR ((CUBE.performance->>'materialProduction_water_l')::numeric > 1907900000)
+        OR ((CUBE.performance->>'printingProductDyeingAndLaundering_water_l')::numeric > 1379700000)
+        OR ((CUBE.performance->>'rawMaterialProcessing_water_l')::numeric > 617700000)
+        OR ((CUBE.performance->>'rawMaterialCollection_water_l')::numeric > 617700000)
+        OR ((CUBE.performance->>'domestic_total_water_l')::numeric > 366700000)
+        OR (((CUBE.performance->>'finalProductAssembly_water_l')::numeric) / NULLIF((CUBE.performance->>'finalProductAssemblytotal')::numeric, 0) > 2288)
+        OR (((CUBE.performance->>'hardComponentTrimProduction_water_l')::numeric) / NULLIF((CUBE.performance->>'hardComponentTrimProductiontotal')::numeric, 0) > 1471)
+        OR (((CUBE.performance->>'materialProduction_water_l')::numeric) / NULLIF((CUBE.performance->>'materialProductiontotal')::numeric, 0) > 1059)
+        OR (((CUBE.performance->>'printingProductDyeingAndLaundering_water_l')::numeric) / NULLIF((CUBE.performance->>'printingProductDyeingAndLaunderingtotal')::numeric, 0) > 5642)
+        OR (((CUBE.performance->>'rawMaterialProcessing_water_l')::numeric) / NULLIF((CUBE.performance->>'rawMaterialProcessingtotal')::numeric, 0) > 587)
+        OR (((CUBE.performance->>'rawMaterialCollection_water_l')::numeric) / NULLIF((CUBE.performance->>'rawMaterialCollectiontotal')::numeric, 0) > 587)
 	) 
     THEN TRUE 
     ELSE FALSE 
@@ -140,8 +169,8 @@ SELECT
 
 	-- CUBE.performance ->> 'is_outlier' AS outlier
 	-- replace previous outlier logic with line above once Javier pushes updated outlier logic to Staging
-    
+
 FROM fem_simple CUBE
 LEFT JOIN public.fem_shares fs ON fs.assessment_id = CUBE.assessment_id
-WHERE CUBE.facility_posted = 'true'
+WHERE CUBE.facility_posted = TRUE
 ORDER BY 1
