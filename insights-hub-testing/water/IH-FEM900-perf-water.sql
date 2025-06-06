@@ -172,5 +172,5 @@ SELECT
 
 FROM fem_simple CUBE
 LEFT JOIN public.fem_shares fs ON fs.assessment_id = CUBE.assessment_id
-WHERE CUBE.facility_posted = TRUE
+WHERE fs.share_status = 'accepted' AND fs.account_id = '67cbd154250c3f00fdebbaa4' --900 Med
 ORDER BY 1
