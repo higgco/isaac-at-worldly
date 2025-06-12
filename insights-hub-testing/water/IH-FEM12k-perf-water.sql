@@ -50,7 +50,7 @@ SELECT
 
     --Sources
     CUBE.performance->>'watsourcetrackopt' AS watsourcetrackopt,
-    CUBE.performance->>'watsourcetrackopteach' AS watsourcetrackopteach,
+    CUBE.performance->>'watsourcetrackoptall' AS watsourcetrackoptall,
 	
     (CUBE.performance->>'watsourcetotaltotal')::numeric AS watsourcetotaltotal,
 	(SELECT string_agg(element, ', ') FROM jsonb_array_elements_text(CUBE.performance->'watsource') AS element) AS watsource, --water sources
