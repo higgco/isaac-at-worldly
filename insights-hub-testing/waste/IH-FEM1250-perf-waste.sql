@@ -12,7 +12,7 @@ SELECT
 	(CUBE.performance->>'sipfulltimeemployees')::numeric AS sipfulltimeemployees,
 
     (CUBE.performance->>'total_waste_score')::numeric AS total_waste_score,
-    (SELECT string_agg(element, ', ') FROM jsonb_array_elements_text(CUBE.performance->'waste_levelsAchieved') AS element) AS water_levelsAchieved,
+    (SELECT string_agg(element, ', ') FROM jsonb_array_elements_text(CUBE.performance->'waste_levelsAchieved') AS element) AS waste_levelsAchieved,
 	CUBE.performance->>'achieved_waste_level1' AS achieved_waste_level1,
 	
     -- Facility Type
@@ -46,6 +46,8 @@ SELECT
 		CUBE.performance->>'sipfacilitytype' LIKE '%Raw Material Collection%')
 		THEN TRUE ELSE FALSE
 	END AS raw_material_collection,
+
+	(CUBE.performance->>'finalProductAssemblytotal')::numeric AS finalProductAssemblytotal,
 
     --Sources
 	CUBE.performance->>'wstsourcenhtrack' AS wstsourcenhtrack,
