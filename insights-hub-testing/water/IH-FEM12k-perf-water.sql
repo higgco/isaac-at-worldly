@@ -48,6 +48,13 @@ SELECT
 		THEN TRUE ELSE FALSE
 	END AS raw_material_collection,
 
+    (CUBE.performance->>'finalProductAssemblytotal')::numeric AS finalProductAssemblytotal,
+    (CUBE.performance->>'printingProductDyeingAndLaunderingtotal')::numeric AS printingProductDyeingAndLaunderingtotal,
+    (CUBE.performance->>'hardComponentTrimProductiontotal')::numeric AS hardComponentTrimProductiontotal,
+    (CUBE.performance->>'materialProductiontotal')::numeric AS materialProductiontotal,
+    (CUBE.performance->>'rawMaterialProcessingtotal')::numeric AS rawMaterialProcessingtotal,
+    (CUBE.performance->>'rawMaterialCollectiontotal')::numeric AS rawMaterialCollectiontotal,
+
     --Sources
     CUBE.performance->>'watsourcetrackopt' AS watsourcetrackopt,
     CUBE.performance->>'watsourcetrackoptall' AS watsourcetrackoptall,
