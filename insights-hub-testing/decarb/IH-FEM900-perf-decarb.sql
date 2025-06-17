@@ -112,6 +112,18 @@ SELECT
     (CUBE.performance->>'ensourceethenoltotal')::numeric AS ensourceethenoltotal,
     (CUBE.performance->>'ensourcehydrogennrtotal')::numeric AS ensourcehydrogennrtotal,
     (CUBE.performance->>'ensourcehydrogenrtotal')::numeric AS ensourcehydrogenrtotal,
+
+	--Renewable Mix
+	(CUBE.performance->>'purch_renewable_biodiesel_mj')::numeric AS purch_renewable_biodiesel_mj,
+	(CUBE.performance->>'purch_renewable_biogas_mj')::numeric AS purch_renewable_biogas_mj,
+	(CUBE.performance->>'purch_renewable_geothermal_mj')::numeric AS purch_renewable_geothermal_mj,
+	(CUBE.performance->>'purch_renewable_hydro_mj')::numeric AS purch_renewable_hydro_mj,
+	(CUBE.performance->>'purch_renewable_microhydro_mj')::numeric AS purch_renewable_microhydro_mj,
+	(CUBE.performance->>'purch_renewable_solarphoto_mj')::numeric AS purch_renewable_solarphoto_mj,
+	(CUBE.performance->>'purch_renewable_wind_mj')::numeric AS purch_renewable_wind_mj,
+	(CUBE.performance->>'purch_renewable_other_mj')::numeric AS purch_renewable_other_mj,
+	(CUBE.performance->>'purch_renewable_unknown_mj')::numeric AS purch_renewable_unknown_mj,
+	
     (CUBE.performance->>'total_energy_score')::numeric AS total_energy_score,
     (SELECT string_agg(element, ', ') FROM jsonb_array_elements_text(CUBE.performance->'energy_levelsAchieved') AS element) AS energy_levelsAchieved,
 	CUBE.performance->>'achieved_energy_level1' AS achieved_energy_level1,

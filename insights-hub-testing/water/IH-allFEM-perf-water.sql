@@ -55,7 +55,9 @@ SELECT
     (CUBE.performance->>'rawMaterialProcessingtotal')::numeric AS rawMaterialProcessingtotal,
     (CUBE.performance->>'rawMaterialCollectiontotal')::numeric AS rawMaterialCollectiontotal,
 
-    --Sources
+    CUBE.performance->>'wattrackdomprodsep' AS wattrackdomprodsep,
+
+	--Sources
     CUBE.performance->>'watsourcetrackopt' AS watsourcetrackopt,
     CUBE.performance->>'watsourcetrackoptall' AS watsourcetrackoptall,
 	
