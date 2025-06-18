@@ -57,7 +57,7 @@ SELECT
 
     CUBE.performance->>'wattrackdomprodsep' AS wattrackdomprodsep,
 
-	--Sources
+    --Sources
     CUBE.performance->>'watsourcetrackopt' AS watsourcetrackopt,
     CUBE.performance->>'watsourcetrackoptall' AS watsourcetrackoptall,
 	
@@ -157,21 +157,22 @@ SELECT
 	CUBE.performance->>'emsengagelocal' AS emsengagelocal,
 	
 	CASE WHEN (
-        ((CUBE.performance->>'watsourcetotaltotal')::numeric > 1957500000)
+        -- ((CUBE.performance->>'watsourcetotaltotal')::numeric > 1957500000)
+        ((CUBE.performance->>'watsourcetotaltotal')::numeric > 103550000000000)
         OR ((CUBE.performance->>'watsourcetotaltotal')::numeric < 0)
-        OR ((CUBE.performance->>'finalProductAssembly_water_l')::numeric > 320800000)
-        OR ((CUBE.performance->>'hardComponentTrimProduction_water_l')::numeric > 220600000)
-        OR ((CUBE.performance->>'materialProduction_water_l')::numeric > 1907900000)
-        OR ((CUBE.performance->>'printingProductDyeingAndLaundering_water_l')::numeric > 1379700000)
-        OR ((CUBE.performance->>'rawMaterialProcessing_water_l')::numeric > 617700000)
-        OR ((CUBE.performance->>'rawMaterialCollection_water_l')::numeric > 617700000)
-        OR ((CUBE.performance->>'domestic_total_water_l')::numeric > 366700000)
-        OR (((CUBE.performance->>'finalProductAssembly_water_l')::numeric) / NULLIF((CUBE.performance->>'finalProductAssemblytotal')::numeric, 0) > 2288)
-        OR (((CUBE.performance->>'hardComponentTrimProduction_water_l')::numeric) / NULLIF((CUBE.performance->>'hardComponentTrimProductiontotal')::numeric, 0) > 1471)
-        OR (((CUBE.performance->>'materialProduction_water_l')::numeric) / NULLIF((CUBE.performance->>'materialProductiontotal')::numeric, 0) > 1059)
-        OR (((CUBE.performance->>'printingProductDyeingAndLaundering_water_l')::numeric) / NULLIF((CUBE.performance->>'printingProductDyeingAndLaunderingtotal')::numeric, 0) > 5642)
-        OR (((CUBE.performance->>'rawMaterialProcessing_water_l')::numeric) / NULLIF((CUBE.performance->>'rawMaterialProcessingtotal')::numeric, 0) > 587)
-        OR (((CUBE.performance->>'rawMaterialCollection_water_l')::numeric) / NULLIF((CUBE.performance->>'rawMaterialCollectiontotal')::numeric, 0) > 587)
+        -- OR ((CUBE.performance->>'finalProductAssembly_water_l')::numeric > 320800000)
+        -- OR ((CUBE.performance->>'hardComponentTrimProduction_water_l')::numeric > 220600000)
+        -- OR ((CUBE.performance->>'materialProduction_water_l')::numeric > 1907900000)
+        -- OR ((CUBE.performance->>'printingProductDyeingAndLaundering_water_l')::numeric > 1379700000)
+        -- OR ((CUBE.performance->>'rawMaterialProcessing_water_l')::numeric > 617700000)
+        -- OR ((CUBE.performance->>'rawMaterialCollection_water_l')::numeric > 617700000)
+        -- OR ((CUBE.performance->>'domestic_total_water_l')::numeric > 366700000)
+        -- OR (((CUBE.performance->>'finalProductAssembly_water_l')::numeric) / NULLIF((CUBE.performance->>'finalProductAssemblytotal')::numeric, 0) > 2288)
+        -- OR (((CUBE.performance->>'hardComponentTrimProduction_water_l')::numeric) / NULLIF((CUBE.performance->>'hardComponentTrimProductiontotal')::numeric, 0) > 1471)
+        -- OR (((CUBE.performance->>'materialProduction_water_l')::numeric) / NULLIF((CUBE.performance->>'materialProductiontotal')::numeric, 0) > 1059)
+        -- OR (((CUBE.performance->>'printingProductDyeingAndLaundering_water_l')::numeric) / NULLIF((CUBE.performance->>'printingProductDyeingAndLaunderingtotal')::numeric, 0) > 5642)
+        -- OR (((CUBE.performance->>'rawMaterialProcessing_water_l')::numeric) / NULLIF((CUBE.performance->>'rawMaterialProcessingtotal')::numeric, 0) > 587)
+        -- OR (((CUBE.performance->>'rawMaterialCollection_water_l')::numeric) / NULLIF((CUBE.performance->>'rawMaterialCollectiontotal')::numeric, 0) > 587)
 	) 
     THEN TRUE 
     ELSE FALSE 
@@ -182,5 +183,5 @@ SELECT
 
 FROM fem_simple CUBE
 LEFT JOIN public.fem_shares fs ON fs.assessment_id = CUBE.assessment_id
-WHERE fs.share_status = 'accepted' AND fs.account_id = '67cbd154250c3f00fdebbaa4' --900 Med
+WHERE CUBE.facility_posted = TRUE
 ORDER BY 1

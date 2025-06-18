@@ -158,6 +158,7 @@ SELECT
 	
 	CASE WHEN (
         ((CUBE.performance->>'watsourcetotaltotal')::numeric > 1957500000)
+        OR ((CUBE.performance->>'watsourcetotaltotal')::numeric < 0)
         OR ((CUBE.performance->>'finalProductAssembly_water_l')::numeric > 320800000)
         OR ((CUBE.performance->>'hardComponentTrimProduction_water_l')::numeric > 220600000)
         OR ((CUBE.performance->>'materialProduction_water_l')::numeric > 1907900000)
