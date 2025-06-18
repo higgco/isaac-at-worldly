@@ -57,7 +57,7 @@ SELECT
 
     CUBE.performance->>'wattrackdomprodsep' AS wattrackdomprodsep,
 
-	--Sources
+    --Sources
     CUBE.performance->>'watsourcetrackopt' AS watsourcetrackopt,
     CUBE.performance->>'watsourcetrackoptall' AS watsourcetrackoptall,
 	
