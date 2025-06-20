@@ -201,7 +201,8 @@ SELECT
 	CUBE.performance->>'emsstrategyawareness' AS emsstrategyawareness,
 	CUBE.performance->>'emshiggindexsubcontract' AS emshiggindexsubcontract,
 	CUBE.performance->>'emshiggindexupstream' AS emshiggindexupstream,
-	CUBE.performance->>'emsengagelocal' AS emsengagelocal
+	CUBE.performance->>'emsengagelocal' AS emsengagelocal,
+	CUBE.performance->>'permit_compliance_solidwaste' AS permit_compliance_solidwaste
 
 	-- CUBE.performance ->> 'is_outlier' AS outlier
 	-- replace previous outlier logic with line above once Javier pushes updated outlier logic to Staging
