@@ -16,6 +16,7 @@ three AS (
         AND raw -> 'results' -> 'answers' -> 'report_sections' ->> 'response' NOT ILIKE '%waste%'
         AND raw -> 'results' -> 'answers' -> 'report_sections' ->> 'response' NOT ILIKE '%wastewater%'
         AND raw -> 'results' -> 'answers' -> 'report_sections' ->> 'response' NOT ILIKE '%airemissions%'
+		AND (raw ->> 'facilityPosted')::boolean = TRUE
 ),
 
 four AS (
@@ -29,6 +30,7 @@ four AS (
         AND raw -> 'results' -> 'answers' -> 'report_sections' ->> 'response' ILIKE '%waste%'
         AND raw -> 'results' -> 'answers' -> 'report_sections' ->> 'response' NOT ILIKE '%wastewater%'
         AND raw -> 'results' -> 'answers' -> 'report_sections' ->> 'response' NOT ILIKE '%airemissions%'
+		AND (raw ->> 'facilityPosted')::boolean = TRUE
 )
 
 SELECT 
