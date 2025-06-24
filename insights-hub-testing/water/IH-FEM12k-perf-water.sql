@@ -177,9 +177,6 @@ SELECT
     ELSE FALSE 
 	END AS outlier
 
-	-- CUBE.performance ->> 'is_outlier' AS outlier
-	-- replace previous outlier logic with line above once Javier pushes updated outlier logic to Staging
-
 FROM fem_simple CUBE
 LEFT JOIN public.fem_shares fs ON fs.assessment_id = CUBE.assessment_id
 WHERE fs.share_status = 'accepted' AND fs.account_id = '67cf0312482e3b00be3f7574' --12k Large
