@@ -204,7 +204,8 @@ SELECT
 	CUBE.performance->>'emsengagelocal' AS emsengagelocal,
 	
 	CUBE.performance->>'permit_compliance_solidwaste' AS permit_compliance_solidwaste,
-	CUBE.performance->>'wstsourcetextile' AS wstsourcetextile
+	CUBE.performance->>'wstsourcetextile' AS wstsourcetextile,
+	CUBE.performance->>'ipe_records' AS ipe_records
 
 FROM fem_simple CUBE
 LEFT JOIN public.fem_shares fs ON fs.assessment_id = CUBE.assessment_id
