@@ -6,6 +6,17 @@ SELECT
 	CUBE.performance->>'rfi_pid' AS rfi_pid,
 	CUBE.performance->>'sitecountry' AS sitecountry,
 	(SELECT string_agg(element, ', ') FROM jsonb_array_elements_text(CUBE.performance->'sipindustrysector') AS element) AS sipindustrysector,	
+	CASE WHEN CUBE.performance->>'sipindustrysector' ILIKE '%Apparel%' THEN TRUE ELSE FALSE END AS apparel_industry,
+	CASE WHEN CUBE.performance->>'sipindustrysector' ILIKE '%Footwear%' THEN TRUE ELSE FALSE END AS footwear_industry,
+	CASE WHEN CUBE.performance->>'sipindustrysector' ILIKE '%Home Textiles%' THEN TRUE ELSE FALSE END AS home_textiles_industry,
+	CASE WHEN CUBE.performance->>'sipindustrysector' ILIKE '%Accessories%' THEN TRUE ELSE FALSE END AS accessories_industry,
+	CASE WHEN CUBE.performance->>'sipindustrysector' ILIKE '%Home Furnishings%' THEN TRUE ELSE FALSE END AS home_furnishings_industry,
+	CASE WHEN CUBE.performance->>'sipindustrysector' ILIKE '%Electronics%' THEN TRUE ELSE FALSE END AS electronics_industry,
+	CASE WHEN CUBE.performance->>'sipindustrysector' ILIKE '%Toys%' THEN TRUE ELSE FALSE END AS toys_industry,
+	CASE WHEN CUBE.performance->>'sipindustrysector' ILIKE '%Soft goods%' THEN TRUE ELSE FALSE END AS outdoor_softgoods_industry,
+	CASE WHEN CUBE.performance->>'sipindustrysector' ILIKE '%Hard Goods%' THEN TRUE ELSE FALSE END AS outdoor_hardgoods_industry,
+	CASE WHEN CUBE.performance->>'sipindustrysector' ILIKE '%Other%' THEN TRUE ELSE FALSE END AS other_industry,
+	
 	(CUBE.performance->>'sipfulltimeemployees')::numeric AS sipfulltimeemployees,
 	(CUBE.performance->>'totalGHGemissions')::numeric AS totalGHGemissions,
     (CUBE.performance->>'totalRefrigerantEmissions')::numeric AS totalRefrigerantEmissions,
@@ -211,7 +222,6 @@ SELECT
 	CUBE.performance->>'airreplacelegal' AS airreplacelegal,
 	CUBE.performance->>'airtech' AS airtech,
 	(SELECT string_agg(element, ', ') FROM jsonb_array_elements_text(CUBE.performance->'sipproductcategories') AS element) AS sipproductcategories,
-	-- CASE WHEN (CUBE.performance->>'ensourcetotal')::numeric > 1035500000 THEN TRUE ELSE FALSE END AS outlier
 	
 	CASE WHEN (
         ((CUBE.performance->>'ensourcetotal')::numeric > 1035500000)
