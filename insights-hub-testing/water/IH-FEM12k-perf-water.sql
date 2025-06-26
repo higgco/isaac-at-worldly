@@ -155,6 +155,9 @@ SELECT
 	CUBE.performance->>'emshiggindexsubcontract' AS emshiggindexsubcontract,
 	CUBE.performance->>'emshiggindexupstream' AS emshiggindexupstream,
 	CUBE.performance->>'emsengagelocal' AS emsengagelocal,
+	CUBE.performance->>'watreduceplan' AS watreduceplan,
+	CUBE.performance->>'waterseparate' AS waterseparate,
+	CUBE.performance->>'watsourcetrackoptrejected' AS watsourcetrackoptrejected,
 	
 	CASE WHEN (
         ((CUBE.performance->>'watsourcetotaltotal')::numeric > 1957500000)

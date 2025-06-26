@@ -245,9 +245,6 @@ SELECT
     ELSE FALSE 
 	END AS outlier,
 
-	-- CUBE.performance ->> 'is_outlier' AS outlier
-	-- replace previous outlier logic with line above once Javier pushes updated outlier logic to Staging
-
 	CASE WHEN (CUBE.performance->>'ensourcetotal')::numeric > 38574 THEN TRUE ELSE FALSE END AS meets_energy_threshold
 
 FROM fem_simple CUBE
