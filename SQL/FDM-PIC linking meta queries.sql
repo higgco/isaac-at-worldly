@@ -8,6 +8,8 @@ SELECT
 	-- raw -> 'results' -> 'answers' -> 'reportingmonth' ->> 'response' AS reporting_month,
 	-- raw -> 'results' -> 'answers' -> 'reportingyear' ->> 'response' AS reporting_year
 FROM public.dct
-WHERE (raw ->> 'facilityPosted')::boolean = TRUE
+WHERE
+	(raw ->> 'facilityPosted')::boolean = TRUE
+	AND raw ->> 'status' NOT ILIKE '%ASD%'
 GROUP BY account_id, raw -> 'results' -> 'answers' -> 'reportingyear' ->> 'response'
 ORDER BY 1 DESC
