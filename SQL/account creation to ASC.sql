@@ -2,6 +2,7 @@ with cte AS(
 SELECT
     a.account_id,
 	a.active,
+	a.demo,
     a.created_on,
 	fslm.assessment_id AS fslm_assessment,
 	fslm."ASC" AS fslm_asc,
@@ -24,6 +25,11 @@ ORDER BY 1 DESC
 
 SELECT 
     account_id,
+	created_on,
+	(CASE WHEN fslm_asc IS NULL THEN fem_asc
+		WHEN fem_asc IS NULL THEN fslm_asc
+		WHEN fem_asc < fslm_asc THEN fem_asc
+		ELSE fslm_asc END) AS assessment_asc,
 	(
 	(CASE WHEN fslm_asc IS NULL THEN fem_asc
 		WHEN fem_asc IS NULL THEN fslm_asc
@@ -31,4 +37,5 @@ SELECT
 		ELSE fslm_asc END)::date - created_on::date) AS diff_days
 FROM 
     cte
-WHERE active = TRUE;
+WHERE active = TRUE AND demo = FALSE
+ORDER BY 4 ASC;
