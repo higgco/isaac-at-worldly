@@ -169,7 +169,7 @@ SELECT
     (SELECT string_agg(element, ', ') FROM jsonb_array_elements_text(CUBE.performance->'sipmaterialsynthleather') AS element) AS sipmaterialsynthleather,
     (SELECT string_agg(element, ', ') FROM jsonb_array_elements_text(CUBE.performance->'sipmaterialtextiles') AS element) AS sipmaterialtextiles,
     (SELECT string_agg(element, ', ') FROM jsonb_array_elements_text(CUBE.performance->'sipmaterialwoodbased') AS element) AS sipmaterialwoodbased,
-    (SELECT string_agg(element, ', ') FROM jsonb_array_elements_text(CUBE.performance->'sipproductcategories') AS element) AS sipproductcategories
+    (SELECT string_agg(element, ', ') FROM jsonb_array_elements_text(CUBE.performance->'sipproductcategories') AS element) AS sipproductcategories,
     CASE WHEN (
         ((CUBE.performance->>'ensourcetotal')::numeric > 1035500000)
         OR ((CUBE.performance->>'finalProductAssemblytotalmj')::numeric > 218000000)
