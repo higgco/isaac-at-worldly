@@ -108,7 +108,6 @@ month AS (
         account_id, raw -> 'results' -> 'answers' -> 'reportingyear' ->> 'response'
     ORDER BY 
         1 DESC
-    LIMIT 100
 )
 
 SELECT
