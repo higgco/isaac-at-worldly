@@ -91,9 +91,30 @@ with cte AS(
 			raw -> 'results' -> 'answers' -> 'sipfacilitytype' ->> 'response' ILIKE '%finalProductAssembly%'
 			OR raw -> 'results' -> 'answers' -> 'sipfacilitytype' ->> 'response' ILIKE '%printingProductDyeingAndLaundering%'
 		)
+),
+
+month AS (
+    SELECT
+        COUNT(DISTINCT assessment_id) AS monthly_assessments,
+        account_id,
+        raw -> 'results' -> 'answers' -> 'reportingyear' ->> 'response' AS reporting_year
+    FROM 
+        public.dct
+    WHERE
+        (raw ->> 'facilityPosted')::boolean = TRUE AND
+        raw ->> 'status' NOT ILIKE '%ASD%'
+    GROUP BY 
+        account_id, raw -> 'results' -> 'answers' -> 'reportingyear' ->> 'response'
+    ORDER BY 
+        1 DESC
 )
 
 SELECT
-	COUNT(DISTINCT account_id)
-FROM cte
-WHERE tier1_qualify = TRUE
+    COUNT(DISTINCT cte.account_id)
+FROM 
+    cte
+LEFT JOIN 
+    month ON cte.account_id = month.account_id
+WHERE 
+    tier1_qualify = TRUE AND
+    monthly_assessments >= 12;
