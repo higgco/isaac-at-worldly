@@ -136,6 +136,7 @@ SELECT
     (CUBE.performance->>'sipoperatingdays')::numeric AS sipoperatingdays,
     (CUBE.performance->>'siptempemployees')::numeric AS siptempemployees,
     (CUBE.performance->>'totalGHGemissions')::numeric AS totalGHGemissions,
+    (CUBE.performance->>'ensourcetotal')::numeric AS ensourcetotal,	
     (CUBE.performance->>'watsourcegroundtotal')::numeric AS watsourcegroundtotal,
     (CUBE.performance->>'watsourcemunicipalbluetotal')::numeric AS watsourcemunicipalbluetotal,
     (CUBE.performance->>'watsourcemunicipalgreytotal')::numeric AS watsourcemunicipalgreytotal,
