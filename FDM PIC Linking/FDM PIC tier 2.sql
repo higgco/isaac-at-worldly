@@ -26,6 +26,8 @@ with cte AS(
         END AS rawMaterialProcessing_prodvol,
         CASE 
             WHEN (
+                raw -> 'results' -> 'answers' -> 'sipfacilitymaterialprocesstextiles' ->> 'response' IS NOT NULL
+                AND
                 raw -> 'results' -> 'answers' -> 'sipfacilitytype' ->> 'response' ILIKE '%materialProduction%'
                 AND 
                 CASE 
@@ -53,6 +55,8 @@ with cte AS(
             ) THEN TRUE
 
             WHEN (
+                raw -> 'results' -> 'answers' -> 'sipfacilitymaterialprocesstextiles' ->> 'response' IS NOT NULL
+                AND
                 raw -> 'results' -> 'answers' -> 'sipfacilitytype' ->> 'response' ILIKE '%rawMaterialProcessing%'
                 AND 
                 CASE 
@@ -81,6 +85,7 @@ with cte AS(
 
             ELSE FALSE
         END AS tier23_qualify,
+        raw -> 'results' -> 'answers' -> 'sipfacilitymaterialprocesstextiles' ->> 'response' AS textile_process,
         raw
     FROM 
         public.dct
@@ -90,11 +95,26 @@ with cte AS(
         AND (
             raw -> 'results' -> 'answers' -> 'sipfacilitytype' ->> 'response' ILIKE '%materialProduction%'
             OR raw -> 'results' -> 'answers' -> 'sipfacilitytype' ->> 'response' ILIKE '%rawMaterialProcessing%'
-    LIMIT 100
-        )
-    )
+        )     
+    ),
+
+month AS(
+SELECT
+COUNT (DISTINCT assessment_id) AS monthly_assessments,
+account_id,
+raw -> 'results' -> 'answers' -> 'reportingyear' ->> 'response' AS reporting_year
+FROM public.dct
+WHERE
+(raw ->> 'facilityPosted')::boolean = TRUE
+AND raw ->> 'status' NOT ILIKE '%ASD%'
+GROUP BY account_id, raw -> 'results' -> 'answers' -> 'reportingyear' ->> 'response'
+ORDER BY 1 DESC
+LIMIT 100
+)
 
 SELECT
-	COUNT(DISTINCT account_id)
+	COUNT(DISTINCT cte.account_id)
 FROM cte
+LEFT JOIN month ON cte.account_id = month.account_id
 WHERE tier23_qualify = TRUE
+AND monthly_assessments >=12
