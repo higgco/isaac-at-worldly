@@ -5,6 +5,7 @@ SELECT
     CUBE.rfi_pid AS rfi_pid,
 	CASE WHEN (((CUBE.facility_posted = TRUE) OR (CUBE.verifier_posted = TRUE)) AND CUBE.status != 'ASD')
 		THEN TRUE ELSE FALSE END AS ih_eligible,
+    CUBE.performance ->> 'sipfacilitytype' AS sipfacilitytype,
     CUBE.performance->>'wattrackdomprodsep' AS wattrackdomprodsep,
     (CUBE.performance->>'production_water_use')::numeric AS production_water_use,
     (CUBE.performance->>'domestic_total_water_l')::numeric AS domestic_total_water_l,
@@ -25,15 +26,43 @@ SELECT
     (CUBE.performance ->> 'water_intensity_l_pc')::numeric AS water_intensity_l_pc,
     (CUBE.performance ->> 'water_intensity_l_kg')::numeric AS water_intensity_l_kg,
 
-    CUBE.performance ->> 'watproduse' AS watproduse
+    CUBE.performance ->> 'watproduse' AS watproduse,
+
+	CASE WHEN (
+        ((CUBE.performance->>'watsourcetotaltotal')::numeric > 1957500000)
+        OR ((CUBE.performance->>'watsourcetotaltotal')::numeric < 0)
+        OR ((CUBE.performance->>'finalProductAssembly_water_l')::numeric > 320800000)
+        OR ((CUBE.performance->>'hardComponentTrimProduction_water_l')::numeric > 220600000)
+        OR ((CUBE.performance->>'materialProduction_water_l')::numeric > 1907900000)
+        OR ((CUBE.performance->>'printingProductDyeingAndLaundering_water_l')::numeric > 1379700000)
+        OR ((CUBE.performance->>'rawMaterialProcessing_water_l')::numeric > 617700000)
+        OR ((CUBE.performance->>'rawMaterialCollection_water_l')::numeric > 617700000)
+        OR ((CUBE.performance->>'domestic_total_water_l')::numeric > 366700000)
+        OR (((CUBE.performance->>'finalProductAssembly_water_l')::numeric) / NULLIF((CUBE.performance->>'finalProductAssemblytotal')::numeric, 0) > 2288)
+        OR (((CUBE.performance->>'hardComponentTrimProduction_water_l')::numeric) / NULLIF((CUBE.performance->>'hardComponentTrimProductiontotal')::numeric, 0) > 1471)
+        OR (((CUBE.performance->>'materialProduction_water_l')::numeric) / NULLIF((CUBE.performance->>'materialProductiontotal')::numeric, 0) > 1059)
+        OR (((CUBE.performance->>'printingProductDyeingAndLaundering_water_l')::numeric) / NULLIF((CUBE.performance->>'printingProductDyeingAndLaunderingtotal')::numeric, 0) > 5642)
+        OR (((CUBE.performance->>'rawMaterialProcessing_water_l')::numeric) / NULLIF((CUBE.performance->>'rawMaterialProcessingtotal')::numeric, 0) > 587)
+        OR (((CUBE.performance->>'rawMaterialCollection_water_l')::numeric) / NULLIF((CUBE.performance->>'rawMaterialCollectiontotal')::numeric, 0) > 587)
+	) 
+    THEN TRUE 
+    ELSE FALSE 
+	END AS outlier
 
 FROM fem_simple CUBE
 WHERE (((CUBE.facility_posted = TRUE) OR (CUBE.verifier_posted = TRUE)) AND CUBE.status != 'ASD')
     AND (CUBE.rfi_pid = 'fem2023' OR CUBE.rfi_pid = 'fem2024')
 )
 
+-- SELECT
+--     SUM(finalProductAssembly_water_l) / SUM(finalProductAssemblytotal) AS finalProductAssembly_water_intensity
+-- FROM wat_cte
+-- WHERE watsourcetotaltotal > 0 AND rfi_pid = 'fem2024' AND outlier = FALSE
+--     AND watproduse ILIKE 'Yes'
+
 SELECT
-    SUM(finalProductAssembly_water_l) / SUM(finalProductAssemblytotal) AS finalProductAssembly_water_intensity
+assessment_id,
+water_intensity_l_pc
 FROM wat_cte
-WHERE watsourcetotaltotal > 0 AND rfi_pid = 'fem2024'
+WHERE watsourcetotaltotal > 0 AND rfi_pid = 'fem2024' AND outlier = FALSE AND sipfacilitytype ILIKE '%Finished Product Assembler%'
     AND watproduse ILIKE 'Yes'
