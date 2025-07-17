@@ -1,5 +1,6 @@
 SELECT
 	DISTINCT CUBE.assessment_id AS assessment_id,
+    a.name AS account_name,
 	CUBE.status AS status,
 	CASE WHEN (((CUBE.facility_posted = TRUE) OR (CUBE.verifier_posted = TRUE)) AND CUBE.status != 'ASD')
 		THEN TRUE ELSE FALSE END AS ih_eligible,	
@@ -182,5 +183,6 @@ SELECT
 
 FROM fem_simple CUBE
 LEFT JOIN public.fem_shares fs ON fs.assessment_id = CUBE.assessment_id
+LEFT JOIN public.account a ON a.account_id = CUBE.account_id
 WHERE fs.share_status = 'accepted' AND fs.account_id = '67cf0312482e3b00be3f7574' --12k Large
 ORDER BY 1
