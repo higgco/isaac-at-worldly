@@ -14,6 +14,15 @@ SELECT
     (CUBE.performance->>'thermal_total_mj')::numeric AS thermal_total_mj,
     (CUBE.performance->>'electric_total_kgco2e')::numeric AS electric_total_kgco2e,
     (CUBE.performance->>'electric_total_mj')::numeric AS electric_total_mj,
+
+    (CUBE.performance->>'purch_renewable_biodiesel_mj')::numeric AS purch_renewable_biodiesel_mj,
+	(CUBE.performance->>'purch_renewable_biogas_mj')::numeric AS purch_renewable_biogas_mj,
+	(CUBE.performance->>'purch_renewable_geothermal_mj')::numeric AS purch_renewable_geothermal_mj,
+	(CUBE.performance->>'purch_renewable_hydro_mj')::numeric AS purch_renewable_hydro_mj,
+	(CUBE.performance->>'purch_renewable_microhydro_mj')::numeric AS purch_renewable_microhydro_mj,
+	(CUBE.performance->>'purch_renewable_solarphoto_mj')::numeric AS purch_renewable_solarphoto_mj,
+	(CUBE.performance->>'purch_renewable_other_mj')::numeric AS purch_renewable_other_mj,
+	(CUBE.performance->>'purch_renewable_unknown_mj')::numeric AS purch_renewable_unknown_mj,
 	
 	(SELECT string_agg(element, ', ') FROM jsonb_array_elements_text(CUBE.performance->'sipfacilitytype') AS element) AS sipfacilitytype,	
 	CASE WHEN (
