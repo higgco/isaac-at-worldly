@@ -1,3 +1,4 @@
+with wat_cte AS (
 SELECT
     CUBE.assessment_id AS assessment_id,
     CUBE.status AS status,
@@ -28,3 +29,11 @@ SELECT
 
 FROM fem_simple CUBE
 WHERE (((CUBE.facility_posted = TRUE) OR (CUBE.verifier_posted = TRUE)) AND CUBE.status != 'ASD')
+    AND (CUBE.rfi_pid = 'fem2023' OR CUBE.rfi_pid = 'fem2024')
+)
+
+SELECT
+    SUM(finalProductAssembly_water_l) / SUM(finalProductAssemblytotal) AS finalProductAssembly_water_intensity
+FROM wat_cte
+WHERE watsourcetotaltotal > 0 AND rfi_pid = 'fem2024'
+    AND watproduse ILIKE 'Yes'
