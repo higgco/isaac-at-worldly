@@ -21,6 +21,7 @@ SELECT
 	(CUBE.performance->>'purch_renewable_hydro_mj')::numeric AS purch_renewable_hydro_mj,
 	(CUBE.performance->>'purch_renewable_microhydro_mj')::numeric AS purch_renewable_microhydro_mj,
 	(CUBE.performance->>'purch_renewable_solarphoto_mj')::numeric AS purch_renewable_solarphoto_mj,
+	(CUBE.performance->>'purch_renewable_wind_mj')::numeric AS purch_renewable_wind_mj,
 	(CUBE.performance->>'purch_renewable_other_mj')::numeric AS purch_renewable_other_mj,
 	(CUBE.performance->>'purch_renewable_unknown_mj')::numeric AS purch_renewable_unknown_mj,
 	
