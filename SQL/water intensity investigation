@@ -65,4 +65,4 @@ assessment_id,
 water_intensity_l_pc
 FROM wat_cte
 WHERE watsourcetotaltotal > 0 AND rfi_pid = 'fem2024' AND outlier = FALSE AND sipfacilitytype ILIKE '%Finished Product Assembler%'
-    AND watproduse ILIKE 'Yes'
+    -- AND watproduse ILIKE 'Yes'
