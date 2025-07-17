@@ -58,7 +58,7 @@ SELECT
 		CUBE.performance->>'sipfacilitytype' LIKE '%Hard Product Component%' OR
 		CUBE.performance->>'sipfacilitytype' LIKE '%Component / Sub-Assembly Manufacturing%')
 		THEN TRUE ELSE FALSE
-	END AS component_sub-assembly_manufacturing,
+	END AS component_subassembly_manufacturing,
 	CASE WHEN (
 		CUBE.performance->>'sipfacilitytype' LIKE '%Material Production%')
 		THEN TRUE ELSE FALSE
@@ -158,6 +158,7 @@ SELECT
     CUBE.performance->>'enGHGtargetbaselinequant' AS enGHGtargetbaselinequant,
     CUBE.performance->>'enGHGtargetbaselineyear' AS enGHGtargetbaselineyear,
     CUBE.performance->>'enGHGtargetquant' AS enGHGtargetquant,
+	CUBE.performance->>'enGHGtargetpct' AS enGHGtargetpct,
     CUBE.performance->>'enGHGtargettargetyear' AS enGHGtargettargetyear,
     CUBE.performance->>'enimproveplan' AS enimproveplan,
     CUBE.performance->>'encoalphaseout' AS encoalphaseout,
