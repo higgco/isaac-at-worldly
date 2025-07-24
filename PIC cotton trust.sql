@@ -39,7 +39,10 @@ SELECT
     COUNT(DISTINCT msi_id) AS count_id,
     COUNT(DISTINCT account_id) AS count_account_id
 FROM cte
-WHERE all_selected_ids ILIKE '%PR0804000852%';
+WHERE EXISTS (
+    SELECT 1 FROM unnest(all_selected_ids) AS id
+    WHERE id ILIKE '%PR0804000852%'
+);
 
 ---
 -- Accounts with MSI IDs that include the specified process
@@ -47,10 +50,13 @@ WHERE all_selected_ids ILIKE '%PR0804000852%';
 --     msi_id AS msi_id,
 --     cte.account_id AS account_id,
 --     a.name AS account_name,
---     all_processes AS all_processes
+--     all_selected_ids
 -- FROM cte
 -- LEFT JOIN public.account a ON a.account_id = cte.account_id
--- WHERE all_processes ILIKE '%PR0804000852%';
+-- WHERE EXISTS (
+--     SELECT 1 FROM unnest(all_selected_ids) AS id
+--     WHERE id ILIKE '%PR0804000852%'
+-- );
 
 ---
 -- Count MSI IDs per account first, then count how many accounts fall into each count
