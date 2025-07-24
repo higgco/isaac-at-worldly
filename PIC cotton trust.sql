@@ -1,19 +1,37 @@
 WITH cte AS (
-  SELECT
-      msi.msi_id,
-      msi.account_id,
-      bm ->> '_id' AS base_material_id,
-      (
-          coalesce(bm -> 'cycles' -> 'P001' -> 'processes', '[]'::jsonb) ||
-          coalesce(bm -> 'cycles' -> 'P002' -> 'processes', '[]'::jsonb) ||
-          coalesce(bm -> 'cycles' -> 'P003' -> 'processes', '[]'::jsonb) ||
-          coalesce(bm -> 'cycles' -> 'P004' -> 'processes', '[]'::jsonb) ||
-          coalesce(bm -> 'cycles' -> 'P005' -> 'processes', '[]'::jsonb)
-      )::text AS all_processes
-  FROM public.msi msi
-  JOIN public.account a ON a.account_id = msi.account_id
-  CROSS JOIN LATERAL jsonb_array_elements(msi.raw -> 'version' -> 'baseMaterials') AS bm
-  WHERE a.demo = FALSE AND a.active = TRUE
+    SELECT
+    msi.msi_id,
+    msi.account_id,
+    bm ->> '_id' AS base_material_id,
+    ARRAY_AGG(sel ->> 'id') AS all_selected_ids
+    FROM public.msi msi
+    JOIN public.account a ON a.account_id = msi.account_id
+    CROSS JOIN LATERAL jsonb_array_elements(msi.raw -> 'version' -> 'baseMaterials') AS bm
+
+    LEFT JOIN LATERAL (
+    SELECT jsonb_array_elements(
+        COALESCE(bm -> 'cycles' -> 'P001' -> 'selected', '[]'::jsonb)
+    ) AS sel
+    UNION ALL
+    SELECT jsonb_array_elements(
+        COALESCE(bm -> 'cycles' -> 'P002' -> 'selected', '[]'::jsonb)
+    )
+    UNION ALL
+    SELECT jsonb_array_elements(
+        COALESCE(bm -> 'cycles' -> 'P003' -> 'selected', '[]'::jsonb)
+    )
+    UNION ALL
+    SELECT jsonb_array_elements(
+        COALESCE(bm -> 'cycles' -> 'P004' -> 'selected', '[]'::jsonb)
+    )
+    UNION ALL
+    SELECT jsonb_array_elements(
+        COALESCE(bm -> 'cycles' -> 'P005' -> 'selected', '[]'::jsonb)
+    )
+    ) AS all_selected ON true
+
+    WHERE a.demo = FALSE AND a.active = TRUE
+    GROUP BY msi.msi_id, msi.account_id, base_material_id
 )
 
 -- Count of MSI IDs and Account IDs
@@ -21,18 +39,18 @@ SELECT
     COUNT(DISTINCT msi_id) AS count_id,
     COUNT(DISTINCT account_id) AS count_account_id
 FROM cte
-WHERE all_processes ILIKE '%PR0804000852%';
+WHERE all_selected_ids ILIKE '%PR0804000852%';
 
 ---
 -- Accounts with MSI IDs that include the specified process
 -- SELECT
---     DISTINCT cte.account_id AS account_id,
+--     msi_id AS msi_id,
+--     cte.account_id AS account_id,
 --     a.name AS account_name,
---     COUNT(DISTINCT msi_id) AS count_id
+--     all_processes AS all_processes
 -- FROM cte
 -- LEFT JOIN public.account a ON a.account_id = cte.account_id
--- WHERE all_processes ILIKE '%PR0804000852%'
--- GROUP BY cte.account_id, a.name;
+-- WHERE all_processes ILIKE '%PR0804000852%';
 
 ---
 -- Count MSI IDs per account first, then count how many accounts fall into each count
