@@ -1,5 +1,5 @@
 -- how different are the overall impacts of 12 months of FDMs and associated FEMs?
-with fdm24 AS (
+CREATE MATERIALIZED VIEW fdm24_mv AS(
     SELECT
         DISTINCT fdm.assessment_id AS assessment_id,
         fdm.account_id,
@@ -111,10 +111,10 @@ with fdm24 AS (
         AND fdm.raw -> 'results' -> 'answers' -> 'reportingyear' ->> 'response' LIKE '2024'
 )
 
-,fdm24_agg AS (
+with fdm24_agg AS (
     SELECT
-        COUNT(DISTINCT fdm24.assessment_id) AS count_fdm24,
-        fdm24.account_id,
+        COUNT(DISTINCT fdm24_mv.assessment_id) AS count_fdm24,
+        fdm24_mv.account_id,
         SUM(finalProductAssembly_prodvol) AS total_finalProductAssembly_prodvol,
         SUM(printingProductDyeingAndLaundering_prodvol) AS total_printingProductDyeingAndLaundering_prodvol,
         SUM(hardComponentTrimProduction_prodvol) AS total_hardComponentTrimProduction_prodvol,
@@ -133,8 +133,8 @@ with fdm24 AS (
         SUM(materialProduction_total_kgco2e) AS total_materialProduction_total_kgco2e,
         SUM(rawMaterialProcessing_total_kgco2e) AS total_rawMaterialProcessing_total_kgco2e,
         SUM(rawMaterialCollection_total_kgco2e) AS total_rawMaterialCollection_total_kgco2e
-    FROM fdm24
-    GROUP BY fdm24.account_id
+    FROM fdm24_mv
+    GROUP BY fdm24_mv.account_id
 )
 
 SELECT
