@@ -153,6 +153,7 @@ SELECT
     CUBE.performance->>'enGHGtargetbaselineyear' AS enGHGtargetbaselineyear,
     CUBE.performance->>'enGHGtargetquant' AS enGHGtargetquant,
     CUBE.performance->>'enGHGtargettargetyear' AS enGHGtargettargetyear,
+    CUBE.performance->>'enGHGtargetpct' AS enGHGtargetpct,
     CUBE.performance->>'enimproveplan' AS enimproveplan,
     CUBE.performance->>'encoalphaseout' AS encoalphaseout,
 	CUBE.performance->>'facility_uses_coal' AS facility_uses_coal,
