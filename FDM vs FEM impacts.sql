@@ -105,11 +105,39 @@ with fdm24 AS (
         -- fdm.raw
     FROM 
         public.dct AS fdm
-    LEFT JOIN public.fem_simple AS fem
-        ON fdm.account_id = fem.account_id
     WHERE
         (fdm.raw ->> 'facilityPosted')::boolean = TRUE
         AND fdm.raw ->> 'status' NOT ILIKE '%ASD%'
         AND fdm.raw -> 'results' -> 'answers' -> 'reportingyear' ->> 'response' LIKE '2024'
-    LIMIT 1000
 )
+
+,fdm24_agg AS (
+    SELECT
+        COUNT(DISTINCT fdm24.assessment_id) AS count_fdm24,
+        fdm24.account_id,
+        SUM(finalProductAssembly_prodvol) AS total_finalProductAssembly_prodvol,
+        SUM(printingProductDyeingAndLaundering_prodvol) AS total_printingProductDyeingAndLaundering_prodvol,
+        SUM(hardComponentTrimProduction_prodvol) AS total_hardComponentTrimProduction_prodvol,
+        SUM(materialProduction_prodvol) AS total_materialProduction_prodvol,
+        SUM(rawMaterialProcessing_prodvol) AS total_rawMaterialProcessing_prodvol,
+        SUM(rawMaterialCollection_prodvol) AS total_rawMaterialCollection_prodvol,
+        SUM(finalProductAssembly_mj) AS total_finalProductAssembly_mj,
+        SUM(printingProductDyeingAndLaundering_mj) AS total_printingProductDyeingAndLaundering_mj,
+        SUM(hardComponentTrimProduction_mj) AS total_hardComponentTrimProduction_mj,
+        SUM(materialProduction_mj) AS total_materialProduction_mj,
+        SUM(rawMaterialProcessing_mj) AS total_rawMaterialProcessing_mj,
+        SUM(rawMaterialCollection_mj) AS total_rawMaterialCollection_mj,
+        SUM(finalProductAssembly_total_kgco2e) AS total_finalProductAssembly_total_kgco2e,
+        SUM(printingProductDyeingAndLaundering_total_kgco2e) AS total_printingProductDyeingAndLaundering_total_kgco2e,
+        SUM(hardComponentTrimProduction_total_kgco2e) AS total_hardComponentTrimProduction_total_kgco2e,
+        SUM(materialProduction_total_kgco2e) AS total_materialProduction_total_kgco2e,
+        SUM(rawMaterialProcessing_total_kgco2e) AS total_rawMaterialProcessing_total_kgco2e,
+        SUM(rawMaterialCollection_total_kgco2e) AS total_rawMaterialCollection_total_kgco2e
+    FROM fdm24
+    GROUP BY fdm24.account_id
+)
+
+SELECT
+    COUNT(DISTINCT fdm24_agg.account_id) AS count_accounts
+FROM fdm24_agg
+WHERE count_fdm24 >= 12
