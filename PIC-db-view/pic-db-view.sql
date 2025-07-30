@@ -43,12 +43,12 @@ WITH eligibility AS (
             WHEN fem.rfi_pid NOT IN ('fem2022', 'fem2021', 'fem2020', 'fem201')
             THEN fem.performance ->> 'finalProductAssemblytotal'
             ELSE 'Check overall production volume quantity and unit'
-        END AS finalProductAssembly_prod_vol_quant_kg,
+        END AS finalProductAssembly_prod_vol_pcspair,
         CASE
             WHEN fem.rfi_pid NOT IN ('fem2022', 'fem2021', 'fem2020', 'fem201')
             THEN fem.performance ->> 'printingProductDyeingAndLaunderingtotal'
             ELSE 'Check overall production volume quantity and unit'
-        END AS printingProductDyeingAndLaundering_prod_vol_pcspair,
+        END AS printingProductDyeingAndLaundering_prod_vol_kg,
         CASE
             WHEN ((fem.rfi_pid IN ('fem2022', 'fem2021', 'fem2020', 'fem201')
             AND (CAST(fem.performance ->> 'sipfacilityannualprodvolquant' AS NUMERIC)>0))
