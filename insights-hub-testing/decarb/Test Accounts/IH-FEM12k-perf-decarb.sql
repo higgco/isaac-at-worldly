@@ -4,6 +4,7 @@ SELECT
 	CUBE.status AS status,
 	CASE WHEN (((CUBE.facility_posted = TRUE) OR (CUBE.verifier_posted = TRUE)) AND CUBE.status != 'ASD')
 		THEN TRUE ELSE FALSE END AS ih_eligible,
+    CASE WHEN (CUBE.status = 'VRF'AND CUBE.verifier_posted = TRUE) THEN TRUE ELSE FALSE END AS verified,
 	CUBE.performance->>'rfi_pid' AS rfi_pid,
 	CUBE.performance->>'sitecountry' AS sitecountry,
 	(SELECT string_agg(element, ', ') FROM jsonb_array_elements_text(CUBE.performance->'sipindustrysector') AS element) AS sipindustrysector,	

@@ -1,3 +1,4 @@
+
 SELECT
 	DISTINCT CUBE.assessment_id AS assessment_id,
 	CUBE.status AS status,
@@ -68,7 +69,7 @@ SELECT
     CUBE.performance->>'wattargetoptblue' AS wattargetoptblue,
     CUBE.performance->>'wattargetoptgrey' AS wattargetoptgrey,
 	
-    (CUBE.performance->>'enGHGtargetpct')::numeric AS enGHGtargetpct,
+    (CUBE.answers->>'enGHGtargetpct')::numeric AS enGHGtargetpct,
     (CUBE.performance->>'ensourcebiodieseltotal')::numeric AS ensourcebiodieseltotal,
     (CUBE.performance->>'ensourcebiodieseltotalghg')::numeric AS ensourcebiodieseltotalghg,
     (CUBE.performance->>'ensourcebiogastotal')::numeric AS ensourcebiogastotal,
@@ -136,6 +137,7 @@ SELECT
     (CUBE.performance->>'sipoperatingdays')::numeric AS sipoperatingdays,
     (CUBE.performance->>'siptempemployees')::numeric AS siptempemployees,
     (CUBE.performance->>'totalGHGemissions')::numeric AS totalGHGemissions,
+    (CUBE.performance->>'totalRefrigerantEmissions')::numeric AS totalRefrigerantEmissions,
     (CUBE.performance->>'ensourcetotal')::numeric AS ensourcetotal,	
     (CUBE.performance->>'watsourcegroundtotal')::numeric AS watsourcegroundtotal,
     (CUBE.performance->>'watsourcemunicipalbluetotal')::numeric AS watsourcemunicipalbluetotal,
