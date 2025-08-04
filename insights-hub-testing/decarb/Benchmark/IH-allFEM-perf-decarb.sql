@@ -262,4 +262,5 @@ SELECT
 FROM fem_simple CUBE
 LEFT JOIN public.fem_shares fs ON fs.assessment_id = CUBE.assessment_id
 WHERE CUBE.facility_posted = 'true'
+    -- AND rfi_pid = 'fem2024'
 ORDER BY 1
