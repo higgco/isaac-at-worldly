@@ -10,7 +10,7 @@ FROM dct
 LEFT JOIN public.account AS a
 ON (dct.raw -> 'account' ->> '_id') = a.account_id
 WHERE
-    (dct.raw ->> 'facilityPosted')::boolean = true
+    (dct.raw ->> 'facilityPosted')::boolean = TRUE
     AND dct.raw ->> 'surveyVersion' = '3.0.0'
     AND a.demo = FALSE)
 
