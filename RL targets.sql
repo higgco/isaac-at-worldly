@@ -21,7 +21,7 @@ SELECT
     COUNT(cte.assessment_id) AS assessment_count,
     t.form_data ->> 'source' AS target_source,
     t.form_data ->> 'targetArea' AS target_area,
-    (t.form_data ->> 'targetYear')::numeric AS target_type,
+    (t.form_data ->> 'targetYear')::numeric AS target_year,
     t.form_data ->> 'baselineUnit' AS target_baseline_unit,
     (t.form_data ->> 'baselineYear')::numeric AS target_baseline_year,
     t.form_data ->> 'facilityType' AS target_facility_type,
