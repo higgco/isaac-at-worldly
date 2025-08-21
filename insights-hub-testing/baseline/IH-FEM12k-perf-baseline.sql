@@ -1,4 +1,5 @@
 SELECT
+    -- Metadata
 	CUBE.assessment_id AS assessment_id,
     a.name AS account_name,
 	CUBE.status AS status,
@@ -8,20 +9,12 @@ SELECT
 	CUBE.performance->>'rfi_pid' AS rfi_pid,
 	CUBE.performance->>'sitecountry' AS sitecountry,
 	(SELECT string_agg(element, ', ') FROM jsonb_array_elements_text(CUBE.performance->'sipindustrysector') AS element) AS sipindustrysector,	
-	(CUBE.performance->>'sipfulltimeemployees')::numeric AS sipfulltimeemployees,
+
+    -- Emission totals
 	(CUBE.performance->>'totalGHGemissions')::numeric AS totalGHGemissions,
     (CUBE.performance->>'totalRefrigerantEmissions')::numeric AS totalRefrigerantEmissions,
-
-    (CUBE.performance->>'purch_renewable_biodiesel_mj')::numeric AS purch_renewable_biodiesel_mj,
-	(CUBE.performance->>'purch_renewable_biogas_mj')::numeric AS purch_renewable_biogas_mj,
-	(CUBE.performance->>'purch_renewable_geothermal_mj')::numeric AS purch_renewable_geothermal_mj,
-	(CUBE.performance->>'purch_renewable_hydro_mj')::numeric AS purch_renewable_hydro_mj,
-	(CUBE.performance->>'purch_renewable_microhydro_mj')::numeric AS purch_renewable_microhydro_mj,
-	(CUBE.performance->>'purch_renewable_solarphoto_mj')::numeric AS purch_renewable_solarphoto_mj,
-	(CUBE.performance->>'purch_renewable_wind_mj')::numeric AS purch_renewable_wind_mj,
-	(CUBE.performance->>'purch_renewable_other_mj')::numeric AS purch_renewable_other_mj,
-	(CUBE.performance->>'purch_renewable_unknown_mj')::numeric AS purch_renewable_unknown_mj,
 	
+    -- Facility type
 	(SELECT string_agg(element, ', ') FROM jsonb_array_elements_text(CUBE.performance->'sipfacilitytype') AS element) AS sipfacilitytype,	
 	CASE WHEN (
 		CUBE.performance->>'sipfacilitytype' LIKE '%Final Product Assembly%' OR
@@ -52,76 +45,52 @@ SELECT
 		CUBE.performance->>'sipfacilitytype' LIKE '%Raw Material Collection%')
 		THEN TRUE ELSE FALSE
 	END AS raw_material_collection,
-	
-	(SELECT string_agg(element, ', ') FROM jsonb_array_elements_text(CUBE.performance->'ensourcefacility') AS element) AS ensourcefacility, --energy sources
-    (CUBE.performance->>'ensourcecoaltotal')::numeric AS ensourcecoaltotal,
-    (CUBE.performance->>'ensourcegeothermtotal')::numeric AS ensourcegeothermtotal,
-    (CUBE.performance->>'ensourcehydrototal')::numeric AS ensourcehydrototal,
-    (CUBE.performance->>'ensourcemicrohydrototal')::numeric AS ensourcemicrohydrototal,
-    (CUBE.performance->>'ensourcesolarphotototal')::numeric AS ensourcesolarphotototal,
-    (CUBE.performance->>'ensourcesolarthermaltotal')::numeric AS ensourcesolarthermaltotal,
-    (CUBE.performance->>'ensourcewindtotal')::numeric AS ensourcewindtotal,
-    (CUBE.performance->>'ensourcepurchrenewtotal')::numeric AS ensourcepurchrenewtotal,
-    (CUBE.performance->>'ensourcerenewablepurchtotal')::numeric AS ensourcerenewablepurchtotal,
-    (CUBE.performance->>'finalProductAssemblytotalghg')::numeric AS finalProductAssemblytotalghg,
-    (CUBE.performance->>'finalProductAssemblytotal')::numeric AS finalProductAssemblytotal,
-    (CUBE.performance->>'printingProductDyeingAndLaunderingtotalghg')::numeric AS printingProductDyeingAndLaunderingtotalghg,
-    (CUBE.performance->>'printingProductDyeingAndLaunderingtotal')::numeric AS printingProductDyeingAndLaunderingtotal,
-    (CUBE.performance->>'hardComponentTrimProductiontotalghg')::numeric AS hardComponentTrimProductiontotalghg,
-    (CUBE.performance->>'materialProductiontotalghg')::numeric AS materialProductiontotalghg,
-    (CUBE.performance->>'rawMaterialProcessingtotalghg')::numeric AS rawMaterialProcessingtotalghg,
-    (CUBE.performance->>'rawMaterialCollectiontotalghg')::numeric AS rawMaterialCollectiontotalghg,
-    (CUBE.performance->>'hardComponentTrimProductiontotal')::numeric AS hardComponentTrimProductiontotal,
-    (CUBE.performance->>'materialProductiontotal')::numeric AS materialProductiontotal,
-    (CUBE.performance->>'rawMaterialProcessingtotal')::numeric AS rawMaterialProcessingtotal,
-    (CUBE.performance->>'rawMaterialCollectiontotal')::numeric AS rawMaterialCollectiontotal,
-    (CUBE.performance->>'finalProductAssemblytotalmj')::numeric AS finalProductAssemblytotalmj,
-    (CUBE.performance->>'printingProductDyeingAndLaunderingtotalmj')::numeric AS printingProductDyeingAndLaunderingtotalmj,
-    (CUBE.performance->>'hardComponentTrimProductiontotalmj')::numeric AS hardComponentTrimProductiontotalmj,
-    (CUBE.performance->>'materialProductiontotalmj')::numeric AS materialProductiontotalmj,
-    (CUBE.performance->>'rawMaterialProcessingtotalmj')::numeric AS rawMaterialProcessingtotalmj,
-    (CUBE.performance->>'rawMaterialCollectiontotalmj')::numeric AS rawMaterialCollectiontotalmj,
-	(CUBE.performance->>'ensourcebiodieseltotalghg')::numeric AS ensourcebiodieseltotalghg,
-    (CUBE.performance->>'ensourcebiomassgentotalghg')::numeric AS ensourcebiomassgentotalghg,
-    (CUBE.performance->>'ensourcebiomasswoodtotalghg')::numeric AS ensourcebiomasswoodtotalghg,
-    (CUBE.performance->>'ensourcechilledwatertotalghg')::numeric AS ensourcechilledwatertotalghg,
-    (CUBE.performance->>'ensourcecoaltotalghg')::numeric AS ensourcecoaltotalghg,
-    (CUBE.performance->>'ensourcedieseltotalghg')::numeric AS ensourcedieseltotalghg,
-    (CUBE.performance->>'ensourceelectricpurchtotalghg')::numeric AS ensourceelectricpurchtotalghg,
-    (CUBE.performance->>'ensourcefueloiltotalghg')::numeric AS ensourcefueloiltotalghg,
-    (CUBE.performance->>'ensourcegeothermtotalghg')::numeric AS ensourcegeothermtotalghg,
-    (CUBE.performance->>'ensourcehydrototalghg')::numeric AS ensourcehydrototalghg,
-    (CUBE.performance->>'ensourcelpgtotalghg')::numeric AS ensourcelpgtotalghg,
-    (CUBE.performance->>'ensourcelngtotalghg')::numeric AS ensourcelngtotalghg,
-    (CUBE.performance->>'ensourcemicrohydrototalghg')::numeric AS ensourcemicrohydrototalghg,
-    (CUBE.performance->>'ensourcenaturalgastotalghg')::numeric AS ensourcenaturalgastotalghg,
-    (CUBE.performance->>'ensourcepetroltotalghg')::numeric AS ensourcepetroltotalghg,
-    (CUBE.performance->>'ensourcepropanetotalghg')::numeric AS ensourcepropanetotalghg,
-    (CUBE.performance->>'ensourcebiodieseltotal')::numeric AS ensourcebiodieseltotal,
-    (CUBE.performance->>'ensourcebiomassgentotal')::numeric AS ensourcebiomassgentotal,
-    (CUBE.performance->>'ensourcebiomasswoodtotal')::numeric AS ensourcebiomasswoodtotal,
-    (CUBE.performance->>'ensourcechilledwatertotal')::numeric AS ensourcechilledwatertotal,
-    (CUBE.performance->>'ensourcedieseltotal')::numeric AS ensourcedieseltotal,
-    (CUBE.performance->>'ensourceelectricpurchtotal')::numeric AS ensourceelectricpurchtotal,
-    (CUBE.performance->>'ensourcefueloiltotal')::numeric AS ensourcefueloiltotal,
-    (CUBE.performance->>'ensourcelpgtotal')::numeric AS ensourcelpgtotal,
-    (CUBE.performance->>'ensourcelngtotal')::numeric AS ensourcelngtotal,
-    (CUBE.performance->>'ensourcenaturalgastotal')::numeric AS ensourcenaturalgastotal,
-    (CUBE.performance->>'ensourcepetroltotal')::numeric AS ensourcepetroltotal,
-    (CUBE.performance->>'ensourcepropanetotal')::numeric AS ensourcepropanetotal,
-    (CUBE.performance->>'ensourcesteampurchtotal')::numeric AS ensourcesteampurchtotal,
-    (CUBE.performance->>'ensourcedistrictheatingtotal')::numeric AS ensourcedistrictheatingtotal,
-    (CUBE.performance->>'ensourcebiogastotal')::numeric AS ensourcebiogastotal,
-    (CUBE.performance->>'ensourcecngtotal')::numeric AS ensourcecngtotal,
-    (CUBE.performance->>'ensourcecoalwaterslurrytotal')::numeric AS ensourcecoalwaterslurrytotal,
-    (CUBE.performance->>'ensourcefabricwastetotal')::numeric AS ensourcefabricwastetotal,
-    (CUBE.performance->>'ensourcebiomasscerttotal')::numeric AS ensourcebiomasscerttotal,
-    (CUBE.performance->>'ensourceethenoltotal')::numeric AS ensourceethenoltotal,
-    (CUBE.performance->>'ensourcehydrogennrtotal')::numeric AS ensourcehydrogennrtotal,
-    (CUBE.performance->>'ensourcehydrogenrtotal')::numeric AS ensourcehydrogenrtotal,
+
+    -- Scores
+    (CUBE.performance->>'total_fem_score')::numeric AS total_fem_score,
+    (CUBE.performance->>'total_ems_score')::numeric AS total_ems_score,
     (CUBE.performance->>'total_energy_score')::numeric AS total_energy_score,
-    (SELECT string_agg(element, ', ') FROM jsonb_array_elements_text(CUBE.performance->'energy_levelsAchieved') AS element) AS energy_levelsAchieved,
-	CUBE.performance->>'achieved_energy_level1' AS achieved_energy_level1,
+    (CUBE.performance->>'total_water_score')::numeric AS total_water_score,
+    (CUBE.performance->>'total_wastewater_score')::numeric AS total_wastewater_score,
+    (CUBE.performance->>'total_air_score')::numeric AS total_air_score,
+    (CUBE.performance->>'total_waste_score')::numeric AS total_waste_score,
+    (CUBE.performance->>'total_chemicals_score')::numeric AS total_chemicals_score,
+
+    -- Levels
+    (CUBE.performance->>'achieved_energy_level1')::boolean AS achieved_energy_level1,
+    (CUBE.performance->>'achieved_water_level1')::boolean AS achieved_water_level1,
+    (CUBE.performance->>'achieved_waste_level1')::boolean AS achieved_waste_level1,
+    (CUBE.performance->>'achieved_ems_level1')::boolean AS achieved_ems_level1,
+    (CUBE.performance->>'achieved_air_level1')::boolean AS achieved_air_level1,
+    (CUBE.performance->>'achieved_chem_level1')::boolean AS achieved_chem_level1,
+    (CUBE.performance->>'achieved_ww_level1')::boolean AS achieved_ww_level1,
+    CASE WHEN(
+        (CUBE.performance->>'achieved_energy_level1')::boolean = TRUE
+        AND (CUBE.performance->>'achieved_water_level1')::boolean = TRUE
+        AND (CUBE.performance->>'achieved_waste_level1')::boolean = TRUE
+        AND (CUBE.performance->>'achieved_ems_level1')::boolean = TRUE
+        AND (CUBE.performance->>'achieved_air_level1')::boolean = TRUE
+        AND (CUBE.performance->>'achieved_chem_level1')::boolean = TRUE
+        AND (CUBE.performance->>'achieved_ww_level1')::boolean = TRUE
+    ) THEN TRUE ELSE FALSE END AS achieved_all_level1,
+    
+    (SELECT string_agg(element, ', ') FROM jsonb_array_elements_text(CUBE.performance->'energy_levelsAchieved') AS element) AS energy_levels_achieved,
+    (SELECT string_agg(element, ', ') FROM jsonb_array_elements_text(CUBE.performance->'water_levelsAchieved') AS element) AS water_levels_achieved,
+    (SELECT string_agg(element, ', ') FROM jsonb_array_elements_text(CUBE.performance->'waste_levelsAchieved') AS element) AS waste_levels_achieved,
+    (SELECT string_agg(element, ', ') FROM jsonb_array_elements_text(CUBE.performance->'ems_levelsAchieved') AS element) AS ems_levels_achieved,
+    (SELECT string_agg(element, ', ') FROM jsonb_array_elements_text(CUBE.performance->'air_levelsAchieved') AS element) AS air_levels_achieved,
+    (SELECT string_agg(element, ', ') FROM jsonb_array_elements_text(CUBE.performance->'chemicals_levelsAchieved') AS element) AS chem_levels_achieved,
+    (SELECT string_agg(element, ', ') FROM jsonb_array_elements_text(CUBE.performance->'wastewater_levelsAchieved') AS element) AS wastewater_levels_achieved,
+
+    -- Audit data
+    (CUBE.performance->>'sipauditlength')::numeric AS sipauditlength,
+    (CUBE.performance->>'sipauditnumber')::numeric AS sipauditnumber,
+
+    -- Operating data
+    (CUBE.performance->>'sipoperatingdays')::numeric AS sipoperatingdays,
+    (CUBE.performance->>'sipfulltimeemployees')::numeric AS sipfulltimeemployees,
+    (CUBE.performance->>'siptempemployees')::numeric AS siptempemployees,
+	
     CUBE.performance->>'sipindustryprograms' AS sipindustryprograms,
 	CUBE.performance->>'sipindustryprogramsselect' AS sipindustryprogramsselect,
     (CUBE.performance->>'energy_overall_carbon_intensity')::numeric AS energy_overall_carbon_intensity,
