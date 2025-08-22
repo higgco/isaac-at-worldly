@@ -10,7 +10,7 @@ FROM public.dct AS fdm
 LEFT JOIN public.account AS a ON a.account_id = fdm.account_id
 LEFT JOIN public.dct_shares AS s ON s.assessment_id = fdm.assessment_id
 WHERE
-    s.account_id = '5a391e4b6324d708c1ee23af'
+    s.account_id = '5a391e4b6324d708c1ee23af' --PVH
     AND s.share_status = 'accepted'
 )
 
