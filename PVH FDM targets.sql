@@ -10,7 +10,7 @@ FROM public.dct AS fdm
 LEFT JOIN public.account AS a ON a.account_id = fdm.account_id
 LEFT JOIN public.dct_shares AS s ON s.assessment_id = fdm.assessment_id
 WHERE
-    s.account_id = 'bbf1677f4621395211a6d61f064e1d32'
+    s.account_id = '5a391e4b6324d708c1ee23af'
     AND s.share_status = 'accepted'
 )
 
@@ -19,6 +19,7 @@ SELECT
     cte.account_id,
     cte.facility_name,
     COUNT(cte.assessment_id) AS assessment_count,
+    t.raw AS raw,
     t.form_data ->> 'source' AS target_source,
     t.form_data ->> 'targetArea' AS target_area,
     (t.form_data ->> 'targetYear')::numeric AS target_year,
@@ -33,3 +34,4 @@ SELECT
 FROM public.fdm_targets AS t
 RIGHT JOIN cte ON t.account_id = cte.account_id
 GROUP BY cte.account_id, cte.facility_name, t.target_id, t.form_data
+ORDER BY 1 DESC
