@@ -47,7 +47,7 @@ SELECT
 	END AS raw_material_collection,
 
     -- Scores
-    (CUBE.performance->>'total_fem_score')::numeric AS total_fem_score,
+    (CUBE.performance->>'total_score')::numeric AS total_score,
     (CUBE.performance->>'total_ems_score')::numeric AS total_ems_score,
     (CUBE.performance->>'total_energy_score')::numeric AS total_energy_score,
     (CUBE.performance->>'total_water_score')::numeric AS total_water_score,
@@ -130,6 +130,10 @@ SELECT
     -- Water
     CUBE.performance->>'watlevel2opt' AS watlevel2opt,
     CUBE.performance->>'app_water' AS app_water,
+    (CASE WHEN
+        CUBE.performance->>'app_water' ILIKE '%highRisk%'
+        THEN TRUE
+    ELSE FALSE END)::boolean AS app_water_high_risk,
     CUBE.performance->>'watsourcetrackopt' AS watsourcetrackopt,
     CUBE.performance->>'watsourcetrackoptall' AS watsourcetrackoptall,
     CUBE.performance->>'wattrackdomprodsep' AS wattrackdomprodsep,
@@ -161,6 +165,11 @@ SELECT
     -- Air
     CUBE.performance->>'airlevel2opt' AS airlevel2opt,
     CUBE.performance->>'app_air' AS app_air,
+    (CASE WHEN
+        (CUBE.performance->>'app_air' ILIKE '%prod%'
+            OR CUBE.performance->>'app_air' ILIKE '%allWithRefrigerant%')
+        THEN TRUE
+    ELSE FALSE END)::boolean AS app_air_prod,    
     CUBE.performance->>'airsourceinvent' AS airsourceinvent,
     CUBE.performance->>'airmobile' AS airmobile,
     CUBE.performance->>'aircompliance' AS aircompliance,
@@ -210,6 +219,10 @@ SELECT
     -- Chemicals
     CUBE.performance->>'chemlevel2opt' AS chemlevel2opt,
     CUBE.performance->>'app_chem_type' AS app_chem_type,
+    (CASE WHEN
+        CUBE.performance->>'app_chem_type' ILIKE '%minimumchemicaluse%'
+        THEN TRUE
+    ELSE FALSE END)::boolean AS app_chem_minimal,
     CUBE.performance->>'chemcmspolicynonprod' AS chemcmspolicynonprod,
     CUBE.performance->>'chemcmspolicyprod' AS chemcmspolicyprod,
     CUBE.performance->>'chemcmstraining' AS chemcmstraining,
@@ -247,4 +260,5 @@ FROM fem_simple CUBE
 LEFT JOIN public.fem_shares fs ON fs.assessment_id = CUBE.assessment_id
 LEFT JOIN public.account a ON a.account_id = CUBE.account_id
 WHERE fs.share_status = 'accepted' AND fs.account_id = '67cf0312482e3b00be3f7574'
+    AND CUBE.performance->>'rfi_pid' IN ('fem2022','fem2023','fem2024')
 ORDER BY 1
