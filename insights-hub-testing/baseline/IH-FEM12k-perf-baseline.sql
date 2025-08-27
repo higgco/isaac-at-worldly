@@ -85,7 +85,7 @@ SELECT
     -- Audit data
     CUBE.performance->>'sipaudit' AS sipaudit,
     (CUBE.performance->>'sipauditlength')::numeric AS sipauditlength,
-    (CUBE.performance->>'sipauditnumber')::numeric AS sipauditnumber,
+    CASE WHEN (CUBE.performance->>'sipauditnumber')::numeric IS NULL THEN 0 ELSE (CUBE.performance->>'sipauditnumber')::numeric END AS sipauditnumber,
 
     -- Operating data
     (CUBE.performance->>'sipoperatingdays')::numeric AS sipoperatingdays,
