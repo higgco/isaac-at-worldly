@@ -83,6 +83,7 @@ SELECT
     (SELECT string_agg(element, ', ') FROM jsonb_array_elements_text(CUBE.performance->'wastewater_levelsAchieved') AS element) AS wastewater_levels_achieved,
 
     -- Audit data
+    CUBE.performance->>'sipaudit' AS sipaudit,
     (CUBE.performance->>'sipauditlength')::numeric AS sipauditlength,
     (CUBE.performance->>'sipauditnumber')::numeric AS sipauditnumber,
 
