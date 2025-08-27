@@ -47,7 +47,7 @@ SELECT
 	END AS raw_material_collection,
 
     -- Scores
-    (CUBE.performance->>'total_score')::numeric AS total_score,
+    CASE WHEN (CUBE.performance->>'total_score')::numeric IS NULL THEN 0 ELSE (CUBE.performance->>'total_score')::numeric END AS total_score,
     (CUBE.performance->>'total_ems_score')::numeric AS total_ems_score,
     (CUBE.performance->>'total_energy_score')::numeric AS total_energy_score,
     (CUBE.performance->>'total_water_score')::numeric AS total_water_score,
