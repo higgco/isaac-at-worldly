@@ -1,6 +1,6 @@
 SELECT
     -- Metadata
-	CUBE.assessment_id AS assessment_id,
+	DISTINCT CUBE.assessment_id AS assessment_id,
     a.name AS account_name,
 	CUBE.status AS status,
 	CASE WHEN (((CUBE.facility_posted = TRUE) OR (CUBE.verifier_posted = TRUE)) AND CUBE.status != 'ASD')
@@ -258,8 +258,10 @@ SELECT
     CUBE.performance->>'chemfailresolution' AS chemfailresolution
 
 FROM fem_simple CUBE
-LEFT JOIN public.fem_shares fs ON fs.assessment_id = CUBE.assessment_id
 LEFT JOIN public.account a ON a.account_id = CUBE.account_id
-WHERE CUBE.facility_posted = 'true'
-    AND CUBE.performance->>'rfi_pid' IN ('fem2022','fem2023','fem2024')
+WHERE CUBE.performance->>'rfi_pid' IN (
+    'fem2022','fem2023',
+    'fem2024')
+    AND CUBE.status != 'ASD'
+    AND (CUBE.facility_posted = TRUE OR CUBE.verifier_posted = TRUE)
 ORDER BY 1
