@@ -566,7 +566,7 @@ with fslm_cte AS(
   FROM fslm_simple AS fslm
   INNER JOIN fslm_shares AS s
   ON s.assessment_id = fslm.assessment_id
-  WHERE s.account_id = '6895ce2c62ff95b4065cb500' -- 1600 Test Account
+  -- WHERE s.account_id = '6895ce2c62ff95b4065cb500' -- 1600 Test Account
 )
 
 SELECT
