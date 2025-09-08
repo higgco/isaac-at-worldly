@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS fem_simple_temp_090825;
-CREATE TABLE TEMP AS (
+CREATE TABLE fem_simple_temp_090825 AS (
 SELECT * FROM public.fem_simple
 WHERE 
     rfi_pid IN ('fem2024', 'fem2023', 'fem2022')
