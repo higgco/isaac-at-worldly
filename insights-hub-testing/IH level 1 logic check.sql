@@ -2,6 +2,7 @@ with cte AS(
 SELECT
     CUBE.assessment_id,
     CUBE.rfi_pid,
+    CUBE.status,
     (CUBE.calculations ->> 'levelOneEmsAchieved')::boolean AS calc_ems_level1,
     (CUBE.calculations ->> 'levelOneEnergyAchieved')::boolean AS calc_energy_level1,
     (CUBE.calculations ->> 'levelOneWaterAchieved')::boolean AS calc_water_level1,
@@ -23,7 +24,9 @@ LEFT JOIN public.fem_shares fs ON fs.assessment_id = CUBE.assessment_id
 WHERE fs.share_status = 'accepted'
     -- AND fs.account_id = '67cf0312482e3b00be3f7574' -- 12k test account
     AND fs.account_id = '5a4b51e8be5af114f55a0832' -- GAP Inc.
-    AND CUBE.rfi_pid IN ('fem2022', 'fem2023', 'fem2024') 
+    AND CUBE.rfi_pid IN (
+        -- 'fem2022', 
+        'fem2023', 'fem2024') 
     -- AND CUBE.verifier_posted = FALSE
 ),
 
@@ -56,6 +59,7 @@ FROM cte
 
 SELECT 
     cte2.assessment_id,
+    cte.status,
     cte2.rfi_pid,
     cte.calc_ems_level1,
     cte.perf_ems_level1,
