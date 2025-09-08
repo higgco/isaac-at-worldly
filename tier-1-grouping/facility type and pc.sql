@@ -1,11 +1,10 @@
-DROP TABLE IF EXISTS fem_simple_temp_090825;
-CREATE TABLE fem_simple_temp_090825 AS (
-SELECT * FROM public.fem_simple
-WHERE 
-    rfi_pid IN ('fem2024', 'fem2023', 'fem2022')
-    AND status != 'ASD'
-    AND facility_posted = TRUE
-);
+-- DROP VIEW IF EXISTS fem_simple_090825;
+-- CREATE VIEW fem_simple_090825 AS
+-- SELECT * FROM public.fem_simple
+-- WHERE 
+--     rfi_pid IN ('fem2024', 'fem2023', 'fem2022')
+--     AND status != 'ASD'
+--     AND facility_posted = TRUE;
 
 WITH cte AS (
 SELECT 
@@ -14,7 +13,7 @@ SELECT
     jsonb_array_length(performance -> 'sipfacilitytype') AS facility_type_count,
     performance -> 'sipproductcategories' AS sipproductcategories,
     jsonb_array_length(performance -> 'sipproductcategories') AS product_category_count
-FROM fem_simple_temp_090825
+FROM fem_simple_090825
 WHERE rfi_pid = 'fem2024'
     AND performance ->> 'sipfacilitytype' ILIKE '%Assembler%'
     AND performance ->> 'sipproductcategories' ILIKE '%Apparel%'
