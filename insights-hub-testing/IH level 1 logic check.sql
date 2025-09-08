@@ -21,8 +21,9 @@ SELECT
 FROM public.fem_simple AS CUBE
 LEFT JOIN public.fem_shares fs ON fs.assessment_id = CUBE.assessment_id
 WHERE fs.share_status = 'accepted'
-    AND fs.account_id = '67cf0312482e3b00be3f7574' -- 12k test account
-    AND CUBE.rfi_pid IN ('fem2022', 'fem2023', 'fem2024')
+    -- AND fs.account_id = '67cf0312482e3b00be3f7574' -- 12k test account
+    AND fs.account_id = '5a4b51e8be5af114f55a0832' -- GAP Inc.
+    AND CUBE.rfi_pid IN ('fem2022', 'fem2023', 'fem2024') 
     -- AND CUBE.verifier_posted = FALSE
 ),
 
@@ -40,15 +41,44 @@ SELECT
 FROM cte
 )
 
-SELECT
-    COUNT(*) as total_assessments,
-    rfi_pid,
-    SUM(CASE WHEN ems_level1_pass = 'Fail' THEN 1 ELSE 0 END) as ems_level1_fail,
-    SUM(CASE WHEN energy_level1_pass = 'Fail' THEN 1 ELSE 0 END) as energy_level1_fail,
-    SUM(CASE WHEN water_level1_pass = 'Fail' THEN 1 ELSE 0 END) as water_level1_fail,
-    SUM(CASE WHEN ww_level1_pass = 'Fail' THEN 1 ELSE 0 END) as ww_level1_fail,
-    SUM(CASE WHEN air_level1_pass = 'Fail' THEN 1 ELSE 0 END) as air_level1_fail,
-    SUM(CASE WHEN waste_level1_pass = 'Fail' THEN 1 ELSE 0 END) as waste_level1_fail,
-    SUM(CASE WHEN chem_level1_pass = 'Fail' THEN 1 ELSE 0 END) as chem_level1_fail
+-- SELECT
+--     COUNT(*) as total_assessments,
+--     rfi_pid,
+--     SUM(CASE WHEN ems_level1_pass = 'Fail' THEN 1 ELSE 0 END) as ems_level1_fail,
+--     SUM(CASE WHEN energy_level1_pass = 'Fail' THEN 1 ELSE 0 END) as energy_level1_fail,
+--     SUM(CASE WHEN water_level1_pass = 'Fail' THEN 1 ELSE 0 END) as water_level1_fail,
+--     SUM(CASE WHEN ww_level1_pass = 'Fail' THEN 1 ELSE 0 END) as ww_level1_fail,
+--     SUM(CASE WHEN air_level1_pass = 'Fail' THEN 1 ELSE 0 END) as air_level1_fail,
+--     SUM(CASE WHEN waste_level1_pass = 'Fail' THEN 1 ELSE 0 END) as waste_level1_fail,
+--     SUM(CASE WHEN chem_level1_pass = 'Fail' THEN 1 ELSE 0 END) as chem_level1_fail
+-- FROM cte2
+-- GROUP BY 2
+
+SELECT 
+    cte2.assessment_id,
+    cte2.rfi_pid,
+    cte.calc_ems_level1,
+    cte.perf_ems_level1,
+    cte.calc_energy_level1,
+    cte.perf_energy_level1,
+    cte.calc_water_level1,
+    cte.perf_water_level1,
+    cte.calc_ww_level1,
+    cte.perf_ww_level1,
+    cte.calc_air_level1,
+    cte.perf_air_level1,
+    cte.calc_waste_level1,
+    cte.perf_waste_level1,
+    cte.calc_chem_level1,
+    cte.perf_chem_level1
 FROM cte2
-GROUP BY 2
+INNER JOIN cte ON cte.assessment_id = cte2.assessment_id
+WHERE (
+    cte2.ems_level1_pass = 'Fail'
+    OR cte2.energy_level1_pass = 'Fail'
+    OR cte2.water_level1_pass = 'Fail'
+    OR cte2.ww_level1_pass = 'Fail'
+    OR cte2.air_level1_pass = 'Fail'
+    OR cte2.waste_level1_pass = 'Fail'
+    OR cte2.chem_level1_pass = 'Fail'
+)
