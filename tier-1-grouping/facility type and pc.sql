@@ -11,6 +11,7 @@ SELECT
     assessment_id,
     performance -> 'sipfacilitytype' AS sipfacilitytype,
     jsonb_array_length(performance -> 'sipfacilitytype') AS facility_type_count,
+    (performance -> 'finalProductAssemblytotal')::numeric AS finished_product_assembly_prod_vol_pcs,
     performance -> 'sipproductcategories' AS sipproductcategories,
     jsonb_array_length(performance -> 'sipproductcategories') AS product_category_count,
     performance -> 'sipfacilityapparelpc' AS sipfacilityapparelpc,
@@ -32,6 +33,7 @@ SELECT
     -- ) AS percentage_of_total,
     -- facility_type_count,
     -- product_category_count
+    finished_product_assembly_prod_vol_pcs,
     sipfacilityapparelpc,
     apparel_pc_count
     -- DISTINCT jsonb_array_elements_text(sipfacilityapparelpc) AS distinct_apparel_pc_values
