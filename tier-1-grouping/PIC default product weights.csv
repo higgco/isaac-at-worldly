@@ -1,39 +1,15 @@
-﻿Product Category,Product Weight (kg)
-Backpack,0.907185
-BaseballCaps,0.113398
-Belts,0.1587572
-Button-DownShirts,0.25
-CasualDresses,0.3742134
-DownJackets,0.453592
-EverydayBras,0.08618248
-FormalDresses,0.453592
-Gloves,0.0907184
-HandBags,0.57152592
-Hats,0.1020582
-Jacket,0.95
-Jeans,0.453592
-JumpsuitsRompers,0.23019794
-LightweightDresses,0.3175144
-LightweightJacket,0.45132404
-OverallsCoveralls,0.8845044
-Pajamabottoms,0.24040376
-Pajamaset,0.43771628
-Pajamatops,0.27895908
-Pants,0.453592
-PoloShirts,0.226796
-RashGuards,0.1814368
-Scarves,0.09979024
-Shorts,0.22226008
-Skirts,0.29029888
-SleepingBag,1.474175
-Socks,0.4
-SportsBras,0.10886208
-SweatersSweatshirtsHoodies,0.55
-Swimwear,0.1
-TankTops,0.11113004
-Tent,6.80389
-TightsLeggingsYogaPants,0.22700006
-Tshirt,0.15
-Underwear,0.13834556
-Vest,0.3175144
-Wallets,0.10886208
+FEM Apparel PC	PIC Product	Product Weight (kg)
+Shirts	Button-DownShirts	0.25
+Dresses	CasualDresses	0.3742134
+Jackets	Jacket	0.95
+Pants	Pants	0.453592
+Skirts	Skirts	0.29029888
+Socks	Socks	0.4
+Sweaters	SweatersSweatshirtsHoodies	0.55
+Swimsuits	Swimwear	0.1
+Baselayers	TankTops	0.11113004
+Hosiery	TightsLeggingsYogaPants	0.22700006
+Leggings & Tights	TightsLeggingsYogaPants	0.22700006
+Jerseys	Tshirt	0.15
+T-shirt	Tshirt	0.15
+Underwear	Underwear	0.13834556
