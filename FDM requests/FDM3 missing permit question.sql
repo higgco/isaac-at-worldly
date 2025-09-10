@@ -1,17 +1,20 @@
 with fdm AS (
 SELECT
-    assessment_id,
-    raw ->> 'name' as assessment_name,
-    raw -> 'account' ->> '_id' as fac_account_id,
-    raw -> 'account' ->> 'name' as fac_account_name,
-    raw ->> 'surveyVersion' as surveyVersion,
-    raw ->> 'status' as status,
-    raw -> 'results' -> 'answers' -> 'sipvalidoperatinglicense' ->> 'response' as sipvalidoperatinglicense
-FROM public.dct
+    dct.assessment_id,
+    dct.raw ->> 'name' as assessment_name,
+    dct.raw -> 'account' ->> '_id' as fac_account_id,
+    dct.raw -> 'account' ->> 'name' as fac_account_name,
+    dct.raw ->> 'surveyVersion' as surveyVersion,
+    dct.raw ->> 'status' as status,
+    dct.raw -> 'results' -> 'answers' -> 'sipvalidoperatinglicense' ->> 'response' as sipvalidoperatinglicense
+FROM public.dct AS dct
+LEFT JOIN public.account AS a
+ON dct.raw -> 'account' ->> '_id' = a.account_id
 WHERE
-    (raw -> 'facilityPosted')::boolean = TRUE
-    AND raw ->> 'surveyVersion' = '3.0.0'
-    AND raw -> 'results' -> 'answers' -> 'sipvalidoperatinglicense' ->> 'response' IS NULL
+    (dct.raw -> 'facilityPosted')::boolean = TRUE
+    AND dct.raw ->> 'surveyVersion' = '3.0.0'
+    AND dct.raw -> 'results' -> 'answers' -> 'sipvalidoperatinglicense' ->> 'response' IS NULL
+    AND a.demo = FALSE
 ),
 
 brand AS (
