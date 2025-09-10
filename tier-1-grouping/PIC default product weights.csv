@@ -1,15 +1,15 @@
-FEM Apparel PC	PIC Product	Product Weight (kg)
-Shirts	Button-DownShirts	0.25
-Dresses	CasualDresses	0.3742134
-Jackets	Jacket	0.95
-Pants	Pants	0.453592
-Skirts	Skirts	0.29029888
-Socks	Socks	0.4
-Sweaters	SweatersSweatshirtsHoodies	0.55
-Swimsuits	Swimwear	0.1
-Baselayers	TankTops	0.11113004
-Hosiery	TightsLeggingsYogaPants	0.22700006
-Leggings & Tights	TightsLeggingsYogaPants	0.22700006
-Jerseys	Tshirt	0.15
-T-shirt	Tshirt	0.15
-Underwear	Underwear	0.13834556
+FEM Apparel PC,PIC Product,Product Weight (kg)
+Shirts,Button-DownShirts,0.25
+Dresses,CasualDresses,0.3742134
+Jackets,Jacket,0.95
+Pants,Pants,0.453592
+Skirts,Skirts,0.29029888
+Socks,Socks,0.4
+Sweaters,SweatersSweatshirtsHoodies,0.55
+Swimsuits,Swimwear,0.1
+Baselayers,TankTops,0.11113004
+Hosiery,TightsLeggingsYogaPants,0.22700006
+Leggings & Tights,TightsLeggingsYogaPants,0.22700006
+Jerseys,Tshirt,0.15
+T-shirt,Tshirt,0.15
+Underwear,Underwear,0.13834556

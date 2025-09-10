@@ -15,7 +15,9 @@ SELECT
     performance -> 'sipproductcategories' AS sipproductcategories,
     jsonb_array_length(performance -> 'sipproductcategories') AS product_category_count,
     performance -> 'sipfacilityapparelpc' AS sipfacilityapparelpc,
-    jsonb_array_length(performance -> 'sipfacilityapparelpc') AS apparel_pc_count
+    jsonb_array_length(performance -> 'sipfacilityapparelpc') AS apparel_pc_count,
+    (performance -> 'ensourcetotal')::numeric AS total_energy_mj,
+    (performance -> 'totalGHGemissions')::numeric AS totalGHGemissions
 FROM fem_simple_090825
 WHERE rfi_pid = 'fem2024'
     AND performance ->> 'sipfacilitytype' ILIKE '%Assembler%'
@@ -35,7 +37,9 @@ SELECT
     -- product_category_count
     finished_product_assembly_prod_vol_pcs,
     sipfacilityapparelpc,
-    apparel_pc_count
+    apparel_pc_count,
+    total_energy_mj,
+    totalGHGemissions
     -- DISTINCT jsonb_array_elements_text(sipfacilityapparelpc) AS distinct_apparel_pc_values
 FROM cte
 WHERE
