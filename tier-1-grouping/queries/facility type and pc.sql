@@ -23,15 +23,17 @@ SELECT
         OR outliers.total_mj_facility_type_outlier_ = TRUE
         OR outliers.normalized_mj_facility_type_outlier_ = TRUE
         OR outliers.year_over_year_mj_outlier = TRUE
+        OR (fem.performance -> 'ensourcetotal')::numeric <= 0
     ) THEN TRUE
     ELSE FALSE
     END AS energy_outlier
 FROM fem_simple_090825 AS fem
 LEFT JOIN fem_data_outliers AS outliers
 ON fem.assessment_id = outliers.assessment_id
-WHERE rfi_pid = 'fem2024'
+WHERE fem.rfi_pid = 'fem2024'
     AND fem.performance ->> 'sipfacilitytype' ILIKE '%Assembler%'
     AND fem.performance ->> 'sipproductcategories' ILIKE '%Apparel%'
+    AND (fem.performance -> 'finalProductAssemblytotal')::numeric > 0
 )
 
 SELECT 
