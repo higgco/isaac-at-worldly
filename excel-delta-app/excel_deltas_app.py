@@ -1,4 +1,4 @@
-# excel_diff_app.py
+# excel_deltas_app.py
 """
 Local Excel Diff App (Streamlit)
 --------------------------------
@@ -15,7 +15,7 @@ Usage
 1) Activate the virtual environment:
    source xlsx-delta-venv/bin/activate
 2) Run the app:
-   streamlit run excel_diff_app.py
+   streamlit run excel_deltas_app.py
 3) Open the local URL Streamlit prints (e.g., http://localhost:8501)
 
 Note: The virtual environment 'xlsx-delta-venv' already contains all required dependencies:
@@ -34,7 +34,7 @@ import streamlit as st
 
 st.set_page_config(page_title="Excel Deltas (Local)", layout="wide")
 
-st.title("🔍 Excel Diff (Local, Private)")
+st.title("🔍 Excel Deltas (Local, Private)")
 st.write("Compare two .xlsx files on your computer. Nothing is uploaded.")
 
 # --------------------- Helpers ---------------------
