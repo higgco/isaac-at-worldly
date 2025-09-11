@@ -12,11 +12,14 @@ Features
 - Produces a downloadable Excel report with per-sheet tabs and a summary
 
 Usage
-1) Install deps (ideally in a virtualenv):
-   pip install streamlit pandas openpyxl xlsxwriter
-2) Run:
+1) Activate the virtual environment:
+   source xlsx-delta-venv/bin/activate
+2) Run the app:
    streamlit run excel_diff_app.py
 3) Open the local URL Streamlit prints (e.g., http://localhost:8501)
+
+Note: The virtual environment 'xlsx-delta-venv' already contains all required dependencies:
+   - streamlit, pandas, openpyxl, xlsxwriter
 
 Notes
 - Works fully offline. Files never leave your computer.
@@ -29,7 +32,7 @@ from typing import Dict, List, Tuple, Optional
 import pandas as pd
 import streamlit as st
 
-st.set_page_config(page_title="Excel Diff (Local)", layout="wide")
+st.set_page_config(page_title="Excel Deltas (Local)", layout="wide")
 
 st.title("🔍 Excel Diff (Local, Private)")
 st.write("Compare two .xlsx files on your computer. Nothing is uploaded.")
@@ -130,7 +133,7 @@ def rowwise_diff(left: pd.DataFrame, right: pd.DataFrame, keys: List[str]) -> Tu
     return added, removed, changed
 
 
-def positional_cell_diff(left: pd.DataFrame, right: pd.DataFrame]) -> pd.DataFrame:
+def positional_cell_diff(left: pd.DataFrame, right: pd.DataFrame) -> pd.DataFrame:
     """Cell-by-cell diff by position (no keys). Returns a long-form table of differences."""
     # Align shapes: expand to the max rows/cols, fill with NaN
     max_rows = max(len(left), len(right))
