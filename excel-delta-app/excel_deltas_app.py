@@ -1,6 +1,6 @@
 # excel_deltas_app.py
 """
-Local Excel Diff App (Streamlit)
+Local Excel Deltas App (Streamlit)
 --------------------------------
 Runs entirely on your machine. No cloud uploads.
 
