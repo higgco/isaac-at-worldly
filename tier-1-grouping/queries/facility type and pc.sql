@@ -9,6 +9,7 @@
 WITH cte AS (
 SELECT 
     fem.assessment_id,
+    fem.rfi_pid,
     fem.performance -> 'sipfacilitytype' AS sipfacilitytype,
     jsonb_array_length(fem.performance -> 'sipfacilitytype') AS facility_type_count,
     (fem.performance -> 'finalProductAssemblytotal')::numeric AS finished_product_assembly_prod_vol_pcs,
@@ -47,6 +48,7 @@ SELECT
     -- ) AS percentage_of_total,
     -- facility_type_count,
     -- product_category_count
+    rfi_pid,
     finished_product_assembly_prod_vol_pcs,
     sipfacilityapparelpc,
     apparel_pc_count,
