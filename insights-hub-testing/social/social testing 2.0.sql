@@ -1,8 +1,9 @@
-with fslm_cte AS(
+-- with fslm_cte AS(
   SELECT 
       fslm.assessment_id,
       fslm.account_id,
       fslm.survey_version,
+      fslm.verification,
       (fslm.performance ->> 'assessment_date')::date AS assessment_date,
       (fslm.performance ->> 'cl_age_verification')::text AS cl_age_verification,
       (fslm.performance ->> 'cl_hazardous_work_legal')::boolean AS cl_hazardous_work_legal,
@@ -610,4 +611,4 @@ with fslm_cte AS(
   INNER JOIN fslm_shares AS s
   ON s.assessment_id = fslm.assessment_id
   -- WHERE s.account_id = '6895ce2c62ff95b4065cb500' -- 1600 Test Account
-)
+-- )
