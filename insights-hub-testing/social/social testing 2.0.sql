@@ -66,7 +66,7 @@
       (fslm.performance ->> 'ep_temp_contracts_avoid_legal')::text AS ep_temp_contracts_avoid_legal,
       (fslm.performance ->> 'ep_work_legal')::text AS ep_work_legal,
       (fslm.performance ->> 'ep_workers_not_given_notice')::text AS ep_workers_not_given_notice,
-      (fslm.performance ->> 'facility_types')::stringarray AS facility_types,
+      -- ARRAY(SELECT jsonb_array_elements_text(fslm.performance -> 'facility_types')) AS facility_types,
       (fslm.performance ->> 'fl_forced_overtime')::text AS fl_forced_overtime,
       (fslm.performance ->> 'fl_migrant_recruitment_legal')::text AS fl_migrant_recruitment_legal,
       (fslm.performance ->> 'fl_passport_access')::text AS fl_passport_access,
@@ -268,7 +268,7 @@
       (fslm.performance ->> 'hs_waste_disposal_legal')::text AS hs_waste_disposal_legal,
       (fslm.performance ->> 'hs_worker_toilets_anytime')::text AS hs_worker_toilets_anytime,
       (fslm.performance ->> 'hs_written_osh_policy_legal')::text AS hs_written_osh_policy_legal,
-      (fslm.performance ->> 'industry_sector')::stringarray AS industry_sector,
+      ARRAY(SELECT jsonb_array_elements_text(fslm.performance -> 'industry_sector')) AS industry_sector,
       (fslm.performance ->> 'number_ft_employees')::integer AS number_ft_employees,
       (fslm.performance ->> 'rh_age_jd')::text AS rh_age_jd,
       (fslm.performance ->> 'rh_age_referenced')::text AS rh_age_referenced,
@@ -610,5 +610,5 @@
   FROM fslm_simple AS fslm
   INNER JOIN fslm_shares AS s
   ON s.assessment_id = fslm.assessment_id
-  -- WHERE s.account_id = '6895ce2c62ff95b4065cb500' -- 1600 Test Account
+  WHERE s.account_id = '6895ce2c62ff95b4065cb500' -- 1600 Test Account
 -- )
