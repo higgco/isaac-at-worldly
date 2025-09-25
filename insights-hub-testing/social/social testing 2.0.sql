@@ -3,6 +3,7 @@
       fslm.assessment_id,
       fslm.account_id,
       fslm.survey_version,
+      fslm.status,
       fslm.verification,
       (fslm.performance ->> 'assessment_date')::date AS assessment_date,
       (fslm.performance ->> 'cl_age_verification')::text AS cl_age_verification,
