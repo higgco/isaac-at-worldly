@@ -21,7 +21,7 @@ A local, private Excel comparison tool built with Streamlit. Compare two Excel w
 ### 1. Clone or Download
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/higgco/isaac-at-worldly.git
 cd excel-delta-app
 ```
 
