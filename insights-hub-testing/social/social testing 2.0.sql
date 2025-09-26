@@ -10,7 +10,6 @@
       THEN TRUE ELSE FALSE END AS ih_eligible,
     EXTRACT(YEAR FROM (fslm.performance ->> 'assessment_date')::date) AS assessment_year,
 
-
     ARRAY(SELECT jsonb_array_elements_text(fslm.performance -> 'facility_types')) AS facility_types,
     CASE WHEN (fslm.performance ->> 'facility_types' ILIKE '%Manufacture of wearing apparel%') THEN TRUE ELSE FALSE END AS ft_manufacture_of_wearing_apparel,
     CASE WHEN (fslm.performance ->> 'facility_types' ILIKE '%Weaving of textiles%') THEN TRUE ELSE FALSE END AS ft_weaving_of_textiles,
