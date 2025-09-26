@@ -8,7 +8,7 @@
       fslm.verifier_posted,
       CASE WHEN (((fslm.facility_posted = TRUE) OR (fslm.verifier_posted = TRUE)) AND fslm.status != 'ASD')
 		    THEN TRUE ELSE FALSE END AS ih_eligible,
-      (fslm.performance ->> 'assessment_date')::date AS assessment_date,
+      EXTRACT(YEAR FROM (fslm.performance ->> 'assessment_date')::date) AS assessment_year,
       (fslm.performance ->> 'cl_age_verification')::text AS cl_age_verification,
       (fslm.performance ->> 'cl_hazardous_work_legal')::boolean AS cl_hazardous_work_legal,
       (fslm.performance ->> 'cl_healthchecks')::text AS cl_healthchecks,
