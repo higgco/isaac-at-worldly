@@ -67,7 +67,7 @@
       (fslm.performance ->> 'ep_temp_contracts_avoid_legal')::text AS ep_temp_contracts_avoid_legal,
       (fslm.performance ->> 'ep_work_legal')::text AS ep_work_legal,
       (fslm.performance ->> 'ep_workers_not_given_notice')::text AS ep_workers_not_given_notice,
-      -- ARRAY(SELECT jsonb_array_elements_text(fslm.performance -> 'facility_types')) AS facility_types,
+      ARRAY(SELECT jsonb_array_elements_text(fslm.performance -> 'facility_types')) AS facility_types,
       (fslm.performance ->> 'fl_forced_overtime')::text AS fl_forced_overtime,
       (fslm.performance ->> 'fl_migrant_recruitment_legal')::text AS fl_migrant_recruitment_legal,
       (fslm.performance ->> 'fl_passport_access')::text AS fl_passport_access,
